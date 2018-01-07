@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerVertical="true">
+
+    <Button
+        android:id="@+id/addNewDrive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Dodaj przejazd" />
+
+    <Button
+        android:id="@+id/searchDrive"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Wyszukaj przejazd" />
+
+    <Button
+        android:id="@+id/myDrives"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Moje przejazdy" />
+
+    <Button
+        android:id="@+id/myBookings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Moje rezerwacje" />
+</LinearLayout>

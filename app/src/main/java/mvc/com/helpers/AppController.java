@@ -16,7 +16,7 @@ public class AppController extends Application {
 
     private static AppController mInstance;
 
-    public static String appApiBaseUrl = "http://localhost:8080/user/rest/1";
+//    public static String appApiBaseUrl = "http://localhost:8080/user/rest/1";
 
     @Override
     public void onCreate() {

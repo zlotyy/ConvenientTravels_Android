@@ -3,8 +3,8 @@ package mvc.com;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -32,30 +32,23 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.springframework.web.client.RestTemplate;
+import org.codehaus.jackson.map.ObjectMapper;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import mvc.com.helpers.AppController;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -69,13 +62,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "test:test"
-    };
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -220,11 +206,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return login.length() > 0;
     }
 
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 0;
-    }
-
     /**
      * Shows the progress UI and hides the login form.
      */
@@ -334,28 +315,52 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
 
             // dziala !!!
 
-            String URL = "http://192.168.21.91:8080/rest/test";
-
-//            Map<String, String> loginCredentials = new HashMap<String, String>();
-//            loginCredentials.put("login", mLogin);
-//            loginCredentials.put("password", mPassword);
+            String URL = "http://192.168.1.38:8080/rest/login";
 
 
             // Instantiate the RequestQueue.
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
             // Request a string response from the provided URL.
-            StringRequest stringRequest = new StringRequest(Request.Method.GET, URL,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
-                            // Display the first 500 characters of the response string.
-                            mLoginView.setText("Response is: "+ response);
-                            Log.i("TAGOnResponse", response.toString());
+                            ObjectMapper mapper = new ObjectMapper();
+                            HashMap<String, String> responseHashMap = new HashMap<>();
+                            String userId = null;
+                            String token = null;
+
+                            try {
+                                if(!response.equals("")) {
+                                    responseHashMap = mapper.readValue(response, HashMap.class);
+                                } else {
+                                    // tutaj zwroc blad - uzytkownik podal zle dane logowania
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            if(responseHashMap.containsKey("userId")){
+                                userId =  responseHashMap.get("userId");
+                                token =  responseHashMap.get("token");
+                            }
+
+                            Log.i("TAGOnResponse", "Odpowiedz: userId" + userId + " token: " + token);
+                            //mLoginView.setText("Id uzytkownika: " + userId);
+
+                            if(userId != null) {
+                                SharedPreferences sharedPref = getSharedPreferences("appPrefs", mContext.MODE_PRIVATE);
+                                SharedPreferences.Editor editor = sharedPref.edit();
+                                editor.putString("userId", userId);
+                                editor.putString("token", token);
+                                editor.commit();
+
+                                Log.i("TAGOnResponse", "SharedPreferences.userId: " + sharedPref.getString("userId", "")
+                                        + " SharedPreferences.token: " + sharedPref.getString("token", ""));
+                            }
                         }
                     }, new Response.ErrorListener() {
                 @Override
@@ -364,35 +369,110 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     VolleyLog.d("TAGOnError " + error.getMessage(), "Error: " + error.getMessage());
                     Log.i("TAGOnResponse", error.getMessage());
                 }
-            });
+            }){
+                protected Map<String, String> getParams() throws AuthFailureError {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("login", mLogin);
+                    params.put("password", mPassword);
+
+                    return params;
+                }};
+
+
             // Add the request to the RequestQueue.
             queue.add(stringRequest);
 
 
 
+//            String URL = "http://178.37.68.252:8080/rest/login";
 
-//            JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, URL, new JSONObject(loginCredentials),
+//            // Instantiate the RequestQueue.
+//            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+//
+//            // Request a string response from the provided URL.
+//            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
+//                    new Response.Listener<String>() {
+//                        @Override
+//                        public void onResponse(String response) {
+//                            mLoginView.setText("Response is: " + response + response);
+//                            Log.i("TAGOnResponse", response.toString());
+//                        }
+//                    },
+//                    new Response.ErrorListener() {
+//                        @Override
+//                        public void onErrorResponse(VolleyError error) {
+//                            mLoginView.setText("That didn't work!");
+//                            VolleyLog.d("TAGOnError " + error.getMessage(), "Error: " + error.getMessage());
+//                            Log.i("TAGOnError", error.getMessage());
+//                        }
+//                    }) ;
+////            {
+//////                    protected Map<String, String> getParams() throws AuthFailureError {
+//////                        Map<String, String> params = new HashMap<String, String>();
+//////                        params.put("param1", "test");
+//////                        params.put("param2", "test");
+//////
+//////                        return params;
+//////                    }
+////
+//////                    @Override
+//////                    public Map<String, String> getHeaders() throws AuthFailureError {
+//////                        HashMap<String, String> headers = new HashMap<>();
+//////                        headers.put("header1", "header1");
+//////                        headers.put("header2", "header2");
+//////
+//////                        return headers;
+//////                    }
+////                };
+//
+//            // Add the request to the RequestQueue.
+//            queue.add(stringRequest);
+
+
+
+
+
+
+//            String URL = "http://178.37.68.252:8080/rest/login";
+//
+//            Map<String, String> loginCredentials = new HashMap<String, String>();
+//            loginCredentials.put("login", mLogin);
+//            loginCredentials.put("password", mPassword);
+//            //JSONObject jsonCredentials = new JSONObject(loginCredentials);
+//
+//            JSONObject jsonCredentials = new JSONObject();
+//            try {
+//                jsonCredentials.put("login", mLogin);
+//                jsonCredentials.put("password", mPassword);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//
+//            JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonCredentials,
 //                    new Response.Listener<JSONObject>()
 //                    {
 //                        @Override
 //                        public void onResponse(JSONObject response) {
 //
-//                            SharedPreferences sharedPref = getSharedPreferences("appPrefs", mContext.MODE_PRIVATE);
-//                            SharedPreferences.Editor editor = sharedPref.edit();
+////                            SharedPreferences sharedPref = getSharedPreferences("appPrefs", mContext.MODE_PRIVATE);
+////                            SharedPreferences.Editor editor = sharedPref.edit();
 //
 //                            try {
-//                                editor.putString("auth_token", response.getString("auth_token"));
-//                                editor.putString("user_id", response.getString("user_id"));
-//                            } catch (JSONException e) {
+//                                //editor.putString("auth_token", response.getString("auth_token"));
+//                                //editor.putString("user_id", response.getString("user_id"));
+//                                //editor.putString("userId", response.)
+//                                Log.i("TAGOnResponse", "test" );
+////                            } catch (JSONException e) {
+//                            } catch (Exception e) {
 //                                e.printStackTrace();
 //                            }
-//                            editor.commit();
+//                            //editor.commit();
 //
-//                            String token = sharedPref.getString("auth_token", "");
-//                            mUserId = sharedPref.getString("user_id", "");
+//                            //String token = sharedPref.getString("auth_token", "");
+//                            //mUserId = sharedPref.getString("user_id", "");
 //
-//                            Log.d("TOKEN", token);
-//                            Log.d("ID", mUserId);
+//                            //Log.d("TOKEN", token);
+//                            //Log.d("ID", mUserId);
 //
 //                        }
 //                    },
@@ -400,18 +480,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //                    {
 //                        @Override
 //                        public void onErrorResponse(VolleyError error) {
-//                            Toast.makeText(mContext, "The login submitted does not exist.", Toast.LENGTH_LONG).show();
+//                            //Toast.makeText(mContext, "The login submitted does not exist.", Toast.LENGTH_LONG).show();
 //
+//                            Log.i("TAGOnError", error.getMessage());
 //                            showProgress(false);
 //                        }
 //                    }
 //            );
-//
-//
-////            RestTemplate restTemplate = new RestTemplate();
-////            String s = restTemplate.getForObject("http://localhost:8080/rest/test", String.class);
-//
-//
 //
 //            // Adding request to request queue
 //            AppController.getInstance().addToRequestQueue(postRequest);
@@ -444,6 +519,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 //finish();
+                Intent intent = new Intent(getBaseContext(), MenuActivity.class);
+                startActivity(intent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
