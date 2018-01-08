@@ -7,14 +7,14 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-public class AppController extends Application {
+public class AppController_USUNAC extends Application {
 
-    public static final String TAG = AppController.class
+    public static final String TAG = AppController_USUNAC.class
             .getSimpleName();
 
     private RequestQueue mRequestQueue;
 
-    private static AppController mInstance;
+    private static AppController_USUNAC mInstance;
 
 //    public static String appApiBaseUrl = "http://localhost:8080/user/rest/1";
 
@@ -24,7 +24,7 @@ public class AppController extends Application {
         mInstance = this;
     }
 
-    public static synchronized AppController getInstance() {
+    public static synchronized AppController_USUNAC getInstance() {
         return mInstance;
     }
 
