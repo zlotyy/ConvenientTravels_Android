@@ -39,16 +39,20 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import mvc.com.helpers.AppController;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -305,7 +309,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         private final String mLogin;
         private final String mPassword;
         private Context mContext;
-        private String mUserId;
 
         UserLoginTask(String login, String password, Context context) {
             mLogin = login;
@@ -317,70 +320,131 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected Boolean doInBackground(Void... params) {
 
             // dziala !!!
+//
+//            String URL = "http://192.168.21.159:8080/rest/login";
 
-            String URL = "http://192.168.1.38:8080/rest/login";
+
+//            // Instantiate the RequestQueue.
+//            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+//
+//            // Request a string response from the provided URL.
+//            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
+//                    new Response.Listener<String>() {
+//                        @Override
+//                        public void onResponse(String response) {
+//                            ObjectMapper mapper = new ObjectMapper();
+//                            HashMap<String, String> responseHashMap = new HashMap<>();
+//                            String userId = null;
+//                            String token = null;
+//
+//                            try {
+//                                if(!response.equals("")) {
+//                                    responseHashMap = mapper.readValue(response, HashMap.class);
+//                                } else {
+//                                    // tutaj zwroc blad - uzytkownik podal zle dane logowania
+//                                }
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                            if(responseHashMap.containsKey("userId")){
+//                                userId =  responseHashMap.get("userId");
+//                                token =  responseHashMap.get("token");
+//                            }
+//
+//                            Log.i("TAGOnResponse", "Odpowiedz: userId" + userId + " token: " + token);
+//                            //mLoginView.setText("Id uzytkownika: " + userId);
+//
+//                            if(userId != null) {
+//                                SharedPreferences sharedPref = getSharedPreferences("appPrefs", mContext.MODE_PRIVATE);
+//                                SharedPreferences.Editor editor = sharedPref.edit();
+//                                editor.putString("userId", userId);
+//                                editor.putString("token", token);
+//                                editor.commit();
+//
+//                                Log.i("TAGOnResponse", "SharedPreferences.userId: " + sharedPref.getString("userId", "")
+//                                        + " SharedPreferences.token: " + sharedPref.getString("token", ""));
+//                            }
+//                        }
+//                    }, new Response.ErrorListener() {
+//                @Override
+//                public void onErrorResponse(VolleyError error) {
+//                    mLoginView.setText("That didn't work!");
+//                    VolleyLog.d("TAGOnError " + error.getMessage(), "Error: " + error.getMessage());
+//                    Log.i("TAGOnResponse", error.getMessage());
+//                }
+//            }){
+//                protected Map<String, String> getParams() throws AuthFailureError {
+//                    Map<String, String> params = new HashMap<String, String>();
+//                    params.put("login", mLogin);
+//                    params.put("password", mPassword);
+//
+//                    return params;
+//                }};
+//
+//
+//            // Add the request to the RequestQueue.
+//            queue.add(stringRequest);
 
 
-            // Instantiate the RequestQueue.
-            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
 
-            // Request a string response from the provided URL.
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
-                    new Response.Listener<String>() {
+            String URL = "http://192.168.21.159:8080/rest/login";
+
+            Map<String, String> loginCredentials = new HashMap<String, String>();
+            loginCredentials.put("login", mLogin);
+            loginCredentials.put("password", mPassword);
+            JSONObject jsonCredentials = new JSONObject(loginCredentials);
+
+            JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonCredentials,
+                    new Response.Listener<JSONObject>()
+                    {
                         @Override
-                        public void onResponse(String response) {
-                            ObjectMapper mapper = new ObjectMapper();
-                            HashMap<String, String> responseHashMap = new HashMap<>();
-                            String userId = null;
-                            String token = null;
+                        public void onResponse(JSONObject response) {
+                            String userId;
+                            String token;
 
                             try {
-                                if(!response.equals("")) {
-                                    responseHashMap = mapper.readValue(response, HashMap.class);
-                                } else {
-                                    // tutaj zwroc blad - uzytkownik podal zle dane logowania
-                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            if(responseHashMap.containsKey("userId")){
-                                userId =  responseHashMap.get("userId");
-                                token =  responseHashMap.get("token");
-                            }
+                                Log.i("TAGOnResponse", "Zalogowano: userId = " + response.getString("userId")
+                                        + " Token = " + response.getString("token") );
 
-                            Log.i("TAGOnResponse", "Odpowiedz: userId" + userId + " token: " + token);
-                            //mLoginView.setText("Id uzytkownika: " + userId);
+                                userId =  response.getString("userId");
+                                token =  response.getString("token");
 
-                            if(userId != null) {
+                                // dodanie userId i tokena do SharedPreferences
                                 SharedPreferences sharedPref = getSharedPreferences("appPrefs", mContext.MODE_PRIVATE);
                                 SharedPreferences.Editor editor = sharedPref.edit();
                                 editor.putString("userId", userId);
                                 editor.putString("token", token);
                                 editor.commit();
 
-                                Log.i("TAGOnResponse", "SharedPreferences.userId: " + sharedPref.getString("userId", "")
-                                        + " SharedPreferences.token: " + sharedPref.getString("token", ""));
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    mLoginView.setText("That didn't work!");
-                    VolleyLog.d("TAGOnError " + error.getMessage(), "Error: " + error.getMessage());
-                    Log.i("TAGOnResponse", error.getMessage());
-                }
-            }){
+                    },
+                    new Response.ErrorListener()
+                    {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //Toast.makeText(mContext, "The login submitted does not exist.", Toast.LENGTH_LONG).show();
+                            VolleyLog.d("TAGOnError " + error.getMessage(), "Error: " + error.getMessage());
+                            Log.i("TAGOnError", error.getMessage());
+                            showProgress(false);
+                        }
+                    }
+            ){
                 protected Map<String, String> getParams() throws AuthFailureError {
                     Map<String, String> params = new HashMap<String, String>();
                     params.put("login", mLogin);
                     params.put("password", mPassword);
 
                     return params;
-                }};
-
-
-            // Add the request to the RequestQueue.
-            queue.add(stringRequest);
+                }
+            };
+            RequestQueue requestQueue1 = Volley.newRequestQueue(getApplicationContext());
+            requestQueue1.add(postRequest);
+//
+//            // Adding request to request queue
+//            AppController.getInstance().addToRequestQueue(postRequest);
 
 
 

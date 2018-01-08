@@ -22,6 +22,7 @@ public class MenuActivity extends AppCompatActivity implements LoaderCallbacks<C
         Button mSearchDriveButton = (Button) findViewById(R.id.searchDrive);
         Button mMyDrivesButton = (Button) findViewById(R.id.myDrives);
         Button mMyBookingsButton = (Button) findViewById(R.id.myBookings);
+        Button logout = (Button) findViewById(R.id.logout);
 
     }
 
