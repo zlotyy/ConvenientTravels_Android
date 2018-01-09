@@ -39,6 +39,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="mvc.com.LoginActivity" />
         </activity>
+        <activity
+            android:name=".AddNewDriveActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".MenuActivity" >
+        </activity>
+        <activity
+            android:name=".ArrivalDetails_AddNewDriveActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".AddNewDriveActivity" >
+        </activity>
+        <activity
+            android:name=".DriveDetails_AddNewDriveActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".ArrivalDetails_AddNewDriveActivity" >
+        </activity>
     </application>
 
 </manifest>

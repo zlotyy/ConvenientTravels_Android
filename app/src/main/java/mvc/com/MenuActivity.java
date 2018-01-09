@@ -1,10 +1,16 @@
 package mvc.com;
 
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
+import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 
 /**
@@ -13,17 +19,69 @@ import android.widget.Button;
 
 public class MenuActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
+    private Context mContext;
+    private static final String TAG = "MenuActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.app_menu);
+        setContentView(R.layout.activity_menu);
 
         Button mNewDriveButton = (Button) findViewById(R.id.addNewDrive);
+        mNewDriveButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), AddNewDriveActivity.class);
+                startActivity(intent);
+            }
+        });
+
         Button mSearchDriveButton = (Button) findViewById(R.id.searchDrive);
         Button mMyDrivesButton = (Button) findViewById(R.id.myDrives);
         Button mMyBookingsButton = (Button) findViewById(R.id.myBookings);
-        Button logout = (Button) findViewById(R.id.logout);
 
+        Button mExitButton = (Button) findViewById(R.id.exit_button);
+        mExitButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // wylogowanie
+                attemptLogout();
+
+                // zamkniecie aplikacji
+                closeApp();
+            }
+        });
+
+        Button mLogoutButton = (Button) findViewById(R.id.logout);
+        mLogoutButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attemptLogout();
+                finish();
+            }
+        });
+
+    }
+
+    private void attemptLogout(){
+        // todo: dodac wylogowanie po stronie serwera
+
+        // usuniecie userId i tokena z SharedPreferences
+        SharedPreferences sharedPref = getSharedPreferences("appPrefs", mContext.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.clear();
+        editor.commit();
+
+        Log.i(TAG, "Wylogowano. SharedPreferences: UserId = " + sharedPref.getString("userId", "")
+                + " Token = " + sharedPref.getString("token", ""));
+    }
+
+
+    private void closeApp(){
+        finish();
+        getParent().finish();
+        System.exit(0);
+        Log.i(TAG, "Zamknieto aplikacje");
     }
 
     @Override

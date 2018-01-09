@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
+    private static boolean loginResult = false;
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -399,8 +400,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             String URL = "http://192.168.21.159:8080/rest/login";
 
-            final boolean[] result = {false};
-
             Map<String, String> loginCredentials = new HashMap<String, String>();
             loginCredentials.put("login", mLogin);
             loginCredentials.put("password", mPassword);
@@ -428,7 +427,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 editor.putString("token", token);
                                 editor.commit();
 
-                                result[0] = true;
+                                LoginActivity.loginResult = true;
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -442,6 +441,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             VolleyLog.d("TAGOnError " + error.getMessage(), "Error: " + error.getMessage());
 //                            Log.i("TAGOnError", error.getMessage());
                             showProgress(false);
+
+                            LoginActivity.loginResult = false;
                         }
                     }
             ){
@@ -467,7 +468,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
             // TODO: register the new account here.
-            return result[0];
+            // TODO: Obsluga blednego/poprawnego logowania - odczekanie na odpowiedz, a dopiero potem ustawianie flagi
+            return true;
         }
 
         @Override
@@ -480,8 +482,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 Intent intent = new Intent(getBaseContext(), MenuActivity.class);
                 startActivity(intent);
             } else {
-//                mPasswordView.setError(getString(R.string.error_incorrect_password));
-//                mPasswordView.requestFocus();
                 Context context = getApplicationContext();
                 CharSequence text = getString(R.string.error_wrong_credentials);
                 int duration = Toast.LENGTH_LONG;

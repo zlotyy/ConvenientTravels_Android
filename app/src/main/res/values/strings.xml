@@ -7,7 +7,7 @@
     <string name="prompt_password">Hasło</string>
     <string name="action_sign_in">Zaloguj się</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="action_exit">Wyjdź</string>
+    <string name="action_exit">Zamknij</string>
     <string name="error_invalid_login">Podany login jest nieprawidłowy</string>
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">Podane hasło jest nieprawidłowe</string>
@@ -17,4 +17,29 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="prompt_city_start">Miasto początkowe</string>
+    <string name="prompt_street_start">Ulica początkowa</string>
+    <string name="prompt_exact_place_start">Dokładne miejsce początkowe</string>
+    <string name="prompt_city_arrival">Miasto docelowe</string>
+    <string name="prompt_street_arrival">Ulica docelowa</string>
+    <string name="prompt_exact_place_arrival">Dokładne miejsce docelowe</string>
+    <string name="label_date_start">Data wyjazdu</string>
+    <string name="header_add_new_drive">Dodaj przejazd</string>
+    <string name="action_go_next">Przejdź dalej</string>
+    <string name="prompt_driver_comment">Komentarz na temat przejazdu</string>
+    <string name="prompt_passengers_quantity">Ilość pasażerów</string>
+    <string name="prompt_cost">Koszt</string>
+    <string name="checkbox_is_smoke_permitted">Można palić</string>
+    <string name="checkbox_is_round_trip">Przejazd w obie strony</string>
+    <string name="action_submit">Zatwierdź</string>
+    <string name="error_add_new_drive">Nie udało się dodać przejazdu</string>
+
+    <string-array name="luggage_array">
+        <item>Mały</item>
+        <item>Duży</item>
+        <item>Średni</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
