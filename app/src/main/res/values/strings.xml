@@ -33,11 +33,12 @@
     <string name="checkbox_is_round_trip">Przejazd w obie strony</string>
     <string name="action_submit">Zatwierdź</string>
     <string name="error_add_new_drive">Nie udało się dodać przejazdu</string>
+    <string name="success_add_new_drive">Dodano przejazd</string>
 
     <string-array name="luggage_array">
-        <item>Mały</item>
-        <item>Duży</item>
-        <item>Średni</item>
+        <item>Maly</item>
+        <item>Sredni</item>
+        <item>Duzy</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->

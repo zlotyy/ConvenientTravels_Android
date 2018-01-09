@@ -38,7 +38,29 @@ public class DriveDTO {
     private List<StopOverPlaceModel> stopOverPlaces;
 
 
+    public DriveDTO(){
 
+    }
+
+    public DriveDTO(String startDate, String returnDate, String cityStart, String streetStart, String exactPlaceStart, String cityArrival,
+                    String streetArrival, String exactPlaceArrival, String isRoundTrip, int cost, LuggageSize luggageSize, int passengersQuantity,
+                    String isSmokePermitted, String driverComment, List<StopOverPlaceModel> stopOverPlaces) {
+        this.startDate = startDate;
+        this.returnDate = returnDate;
+        this.cityStart = cityStart;
+        this.streetStart = streetStart;
+        this.exactPlaceStart = exactPlaceStart;
+        this.cityArrival = cityArrival;
+        this.streetArrival = streetArrival;
+        this.exactPlaceArrival = exactPlaceArrival;
+        this.isRoundTrip = isRoundTrip;
+        this.cost = cost;
+        this.luggageSize = luggageSize;
+        this.passengersQuantity = passengersQuantity;
+        this.isSmokePermitted = isSmokePermitted;
+        this.driverComment = driverComment;
+        this.stopOverPlaces = stopOverPlaces;
+    }
 
     public String getStartDate() {
         return startDate;

@@ -31,12 +31,19 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import mvc.com.dto.DriveDTO;
 import mvc.com.dto.DriveDTO_String;
+import mvc.com.enums.LuggageSize;
+import mvc.com.model.StopOverPlaceModel;
 
 /**
  * Created by zloty on 2018-01-09.
@@ -104,10 +111,9 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
                 drive.setIsSmokePermitted(isSmokePermitted);
                 drive.setIsRoundTrip(isRoundTrip);
 
-//                Intent nextIntent = new Intent(getApplicationContext(), MenuActivity.class);
-//                startActivity(nextIntent);
+                DriveDTO driveDTO = parseToDriveDTO(drive);
 
-                attemptSubmit(drive);
+                new AddNewDriveTask(driveDTO, getApplicationContext()).execute((Void) null);
             }
         });
 
@@ -115,8 +121,51 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
 
     }
 
-    private void attemptSubmit(DriveDTO_String drive){
-        new AddNewDriveTask(drive, getApplicationContext()).execute((Void) null);
+    private DriveDTO parseToDriveDTO(DriveDTO_String drive){
+        DriveDTO driveDTO = new DriveDTO();
+
+        driveDTO.setCityStart(drive.getCityStart());
+        driveDTO.setStreetStart(drive.getStreetStart());
+        driveDTO.setExactPlaceStart(drive.getExactPlaceStart());
+        driveDTO.setCityArrival(drive.getCityArrival());
+        driveDTO.setStreetArrival(drive.getStreetArrival());
+        driveDTO.setExactPlaceArrival(drive.getExactPlaceArrival());
+        driveDTO.setStartDate(drive.getStartDate());
+        driveDTO.setReturnDate(drive.getReturnDate());
+        driveDTO.setIsRoundTrip(drive.getIsRoundTrip());
+        driveDTO.setIsSmokePermitted(drive.getIsSmokePermitted());
+        driveDTO.setDriverComment(drive.getDriverComment());
+
+        if(!drive.getCost().equals("")) {
+            driveDTO.setCost(Integer.parseInt(drive.getCost()));
+        } else {
+            driveDTO.setCost(0);
+        }
+
+        if(!drive.getPassengersQuantity().equals("")){
+            driveDTO.setPassengersQuantity(Integer.parseInt(drive.getPassengersQuantity()));
+        } else {
+            driveDTO.setPassengersQuantity(0);
+        }
+
+        if(drive.getLuggageSize() != null) {
+            if (drive.getLuggageSize().equals("Maly")) {
+                driveDTO.setLuggageSize(LuggageSize.MALY);
+            } else if (drive.getLuggageSize().equals("Sredni")) {
+                driveDTO.setLuggageSize(LuggageSize.SREDNI);
+            } else if (drive.getLuggageSize().equals("Duzy")) {
+                driveDTO.setLuggageSize(LuggageSize.DUZY);
+            } else {
+                driveDTO.setLuggageSize(null);
+            }
+        } else {
+            driveDTO.setLuggageSize(null);
+        }
+
+        driveDTO.setStopOverPlaces(Collections.<StopOverPlaceModel>emptyList());
+
+
+        return driveDTO;
     }
 
 
@@ -126,72 +175,74 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
 
     public class AddNewDriveTask extends AsyncTask<Void, Void, Boolean> {
 
-        private final DriveDTO_String drive;
+        private final DriveDTO driveDTO;
         private Context mContext;
 
-        AddNewDriveTask(DriveDTO_String drive, Context context) {
-            this.drive = drive;
+        AddNewDriveTask(DriveDTO driveDTO, Context context) {
+            this.driveDTO = driveDTO;
             mContext = context;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
 
+            String URL = "http://192.168.0.18:8080/rest/addNewDrive";
 
-            String URL = "http://192.168.1.38:8080/rest/addNewDrive";
+            // parsowanie na DriveDTO
+            JSONObject jsonDrive = new JSONObject();
 
-//            JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonCredentials,
-//                    new Response.Listener<JSONObject>()
-//                    {
-//                        @Override
-//                        public void onResponse(JSONObject response) {
-//                            String userId;
-//                            String token;
-//
-//                            try {
-//                                Log.i("TAGOnResponse", "Zalogowano: userId = " + response.getString("userId")
-//                                        + " Token = " + response.getString("token") );
-//
-//                                userId =  response.getString("userId");
-//                                token =  response.getString("token");
-//
-//                                // dodanie userId i tokena do SharedPreferences
-//                                SharedPreferences sharedPref = getSharedPreferences("appPrefs", mContext.MODE_PRIVATE);
-//                                SharedPreferences.Editor editor = sharedPref.edit();
-//                                editor.putString("userId", userId);
-//                                editor.putString("token", token);
-//                                editor.commit();
-//
-//                                LoginActivity.loginResult = true;
-//                            } catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    },
-//                    new Response.ErrorListener()
-//                    {
-//                        @Override
-//                        public void onErrorResponse(VolleyError error) {
-//                            //Toast.makeText(mContext, "The login submitted does not exist.", Toast.LENGTH_LONG).show();
-//                            VolleyLog.d("TAGOnError " + error.getMessage(), "Error: " + error.getMessage());
-////                            Log.i("TAGOnError", error.getMessage());
-//                            showProgress(false);
-//
-//                            LoginActivity.loginResult = false;
-//                        }
-//                    }
-//            ){
-//                protected Map<String, String> getParams() throws AuthFailureError {
-//                    Map<String, String> params = new HashMap<String, String>();
-//                    params.put("login", mLogin);
-//                    params.put("password", mPassword);
-//
-//                    return params;
-//                }
-//            };
-//            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-//            queue.add(postRequest);
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                String jsonDriveString = mapper.writeValueAsString(driveDTO);
+                jsonDrive  = new JSONObject(jsonDriveString);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
+            //todo: po odebraniu odpowiedzi z serwera wyslac toster ze ok
+            JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonDrive,
+                    new Response.Listener<JSONObject>()
+                    {
+                        @Override
+                        public void onResponse(JSONObject response) {
+
+                            try {
+                                Log.i("TAGOnResponse", "TEST" );
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener()
+                    {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //Toast.makeText(mContext, "The login submitted does not exist.", Toast.LENGTH_LONG).show();
+                            VolleyLog.d("TAGOnError " + error.getMessage(), "Error: " + error.getMessage());
+//                            Log.i("TAGOnError", error.getMessage());
+                        }
+                    }
+            ){
+                @Override
+                public HashMap<String, String> getHeaders() throws AuthFailureError {
+                    HashMap<String, String> headers = new HashMap<String, String>();
+
+                    SharedPreferences sharedPref = getSharedPreferences("appPrefs", mContext.MODE_PRIVATE);
+                    String userId = sharedPref.getString("userId", "");
+                    String token = sharedPref.getString("token", "");
+
+                    //headers.put("Content-Type", "application/json");
+                    headers.put("userid", userId);
+                    headers.put("token", token);
+
+                    return headers;
+                }
+            };
+            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+            queue.add(postRequest);
 
             return true;
         }
@@ -200,6 +251,13 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
         protected void onPostExecute(final Boolean success) {
 
             if (success) {
+                Context context = getApplicationContext();
+                CharSequence text = getString(R.string.success_add_new_drive);
+                int duration = Toast.LENGTH_LONG;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.setGravity(Gravity.TOP, 0, 150);
+                toast.show();
                 //finish();
                 Intent intent = new Intent(getBaseContext(), MenuActivity.class);
                 startActivity(intent);

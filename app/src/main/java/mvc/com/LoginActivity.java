@@ -62,7 +62,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-    private static boolean loginResult = false;
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -317,6 +316,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
+        private boolean loginResult = false;
+
         private final String mLogin;
         private final String mPassword;
         private Context mContext;
@@ -398,7 +399,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
 
-            String URL = "http://192.168.21.159:8080/rest/login";
+            String URL = "http://192.168.0.18:8080/rest/login";
 
             Map<String, String> loginCredentials = new HashMap<String, String>();
             loginCredentials.put("login", mLogin);
@@ -427,7 +428,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 editor.putString("token", token);
                                 editor.commit();
 
-                                LoginActivity.loginResult = true;
+                                loginResult = true;
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -442,18 +443,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //                            Log.i("TAGOnError", error.getMessage());
                             showProgress(false);
 
-                            LoginActivity.loginResult = false;
+                            loginResult = false;
                         }
                     }
-            ){
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    Map<String, String> params = new HashMap<String, String>();
-                    params.put("login", mLogin);
-                    params.put("password", mPassword);
-
-                    return params;
-                }
-            };
+            );
             RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
             queue.add(postRequest);
 
