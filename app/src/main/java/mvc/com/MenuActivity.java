@@ -37,23 +37,32 @@ public class MenuActivity extends AppCompatActivity implements LoaderCallbacks<C
         });
 
         Button mSearchDriveButton = (Button) findViewById(R.id.searchDrive);
+
         Button mMyDrivesButton = (Button) findViewById(R.id.myDrives);
+        mMyDrivesButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MyDrivesListActivity.class);
+                startActivity(intent);
+            }
+        });
+
         Button mMyBookingsButton = (Button) findViewById(R.id.myBookings);
 
         Button mExitButton = (Button) findViewById(R.id.exit_button);
         mExitButton.setOnClickListener(new OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                // wylogowanie
                 attemptLogout();
-
-                // zamkniecie aplikacji
                 closeApp();
             }
         });
 
         Button mLogoutButton = (Button) findViewById(R.id.logout);
         mLogoutButton.setOnClickListener(new OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 attemptLogout();

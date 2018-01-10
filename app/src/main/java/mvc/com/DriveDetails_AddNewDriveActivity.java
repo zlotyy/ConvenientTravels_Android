@@ -7,7 +7,9 @@ import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -43,6 +45,7 @@ import java.util.Map;
 import mvc.com.dto.DriveDTO;
 import mvc.com.dto.DriveDTO_String;
 import mvc.com.enums.LuggageSize;
+import mvc.com.helpers.DateFormatHelper;
 import mvc.com.model.StopOverPlaceModel;
 
 /**
@@ -88,8 +91,14 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
 
         Button mSubmitNewDriveButton = findViewById(R.id.submit_new_drive_button);
         mSubmitNewDriveButton.setOnClickListener(new OnClickListener() {
+
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
+                // odebranie obiektu z poprzedniego kroku formularza
+                Intent intent = getIntent();
+                DriveDTO_String drive = intent.getParcelableExtra("Drive");
+
                 String isSmokePermitted = "false";
                 String isRoundTrip = "false";
 
@@ -98,18 +107,31 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
                 }
                 if(mRoundTripCheckbox.isChecked()){
                     isRoundTrip = "true";
-                }
 
-                // odebranie obiektu z poprzedniego kroku formularza
-                Intent intent = getIntent();
-                DriveDTO_String drive = intent.getParcelableExtra("Drive");
+                    // parsowanie daty i czasu i dodanie do obiektu drive
+                    String returnDate;
+                    String returnTime;
+                    String returnDateTime;
+
+                    // parsowanie datepickera na stringa
+                    DateFormatHelper dateHelper = new DateFormatHelper(mDatePickerReturnDate, "yyyy-MM-dd");
+                    returnDate = dateHelper.datepickerToString_DateFormat();
+
+                    // parsowanie timepickera na stringa
+                    DateFormatHelper timeHelper = new DateFormatHelper(mTimePickerReturnDate, "HH:mm");
+                    returnTime = timeHelper.timepickerToString_DateFormat();
+
+                    returnDateTime = returnDate + " " + returnTime;
+
+                    drive.setIsRoundTrip(isRoundTrip);
+                    drive.setReturnDate(returnDateTime);
+                }
 
                 drive.setDriverComment(mDriverCommentView.getText().toString());
                 drive.setPassengersQuantity(mPassengersQuantityView.getText().toString());
                 drive.setCost(mCostView.getText().toString());
                 //drive.setLuggageSize(mLuggageSpinner.getSelectedItem().toString());
                 drive.setIsSmokePermitted(isSmokePermitted);
-                drive.setIsRoundTrip(isRoundTrip);
 
                 DriveDTO driveDTO = parseToDriveDTO(drive);
 
@@ -186,7 +208,7 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            String URL = "http://192.168.0.18:8080/rest/addNewDrive";
+            String URL = getString(R.string.server_url) + "/rest/addNewDrive";
 
             // parsowanie na DriveDTO
             JSONObject jsonDrive = new JSONObject();
@@ -201,7 +223,6 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
                 e.printStackTrace();
             }
 
-            //todo: po odebraniu odpowiedzi z serwera wyslac toster ze ok
             JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.POST, URL, jsonDrive,
                     new Response.Listener<JSONObject>()
                     {
@@ -209,8 +230,17 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
                         public void onResponse(JSONObject response) {
 
                             try {
-                                Log.i("TAGOnResponse", "TEST" );
+                                Log.i("TAGOnResponse", "Poprawnie dodano przejazd do bazy danych" );
 
+                                CharSequence text = getString(R.string.success_add_new_drive);
+                                int duration = Toast.LENGTH_LONG;
+
+                                Toast toast = Toast.makeText(mContext, text, duration);
+                                toast.setGravity(Gravity.BOTTOM, 0, 150);
+                                toast.show();
+
+                                Intent intent = new Intent(getBaseContext(), MenuActivity.class);
+                                startActivity(intent);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -220,9 +250,15 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
                     {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            //Toast.makeText(mContext, "The login submitted does not exist.", Toast.LENGTH_LONG).show();
                             VolleyLog.d("TAGOnError " + error.getMessage(), "Error: " + error.getMessage());
-//                            Log.i("TAGOnError", error.getMessage());
+
+                            //CharSequence text = getString(R.string.error_add_new_drive);
+                            CharSequence text = error.getMessage();
+                            int duration = Toast.LENGTH_LONG;
+
+                            Toast toast = Toast.makeText(mContext, text, duration);
+                            toast.setGravity(Gravity.TOP, 0, 150);
+                            toast.show();
                         }
                     }
             ){
@@ -251,31 +287,30 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
         protected void onPostExecute(final Boolean success) {
 
             if (success) {
-                Context context = getApplicationContext();
-                CharSequence text = getString(R.string.success_add_new_drive);
-                int duration = Toast.LENGTH_LONG;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.setGravity(Gravity.TOP, 0, 150);
-                toast.show();
-                //finish();
-                Intent intent = new Intent(getBaseContext(), MenuActivity.class);
-                startActivity(intent);
+//                Context context = getApplicationContext();
+//                CharSequence text = getString(R.string.success_add_new_drive);
+//                int duration = Toast.LENGTH_LONG;
+//
+//                Toast toast = Toast.makeText(context, text, duration);
+//                toast.setGravity(Gravity.TOP, 0, 150);
+//                toast.show();
+//
+//                Intent intent = new Intent(getBaseContext(), MenuActivity.class);
+//                startActivity(intent);
             } else {
-                Context context = getApplicationContext();
-                CharSequence text = getString(R.string.error_add_new_drive);
-                int duration = Toast.LENGTH_LONG;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.setGravity(Gravity.TOP, 0, 150);
-                toast.show();
+//                Context context = getApplicationContext();
+//                CharSequence text = getString(R.string.error_add_new_drive);
+//                int duration = Toast.LENGTH_LONG;
+//
+//                Toast toast = Toast.makeText(context, text, duration);
+//                toast.setGravity(Gravity.TOP, 0, 150);
+//                toast.show();
             }
         }
 
         @Override
         protected void onCancelled() {
-//            mAuthTask = null;
-//            showProgress(false);
+
         }
     }
 

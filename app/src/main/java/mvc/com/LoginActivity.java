@@ -68,6 +68,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     private UserLoginTask mAuthTask = null;
 
+
+    private static final String TAG = "LoginActivity";
+
     // UI references.
     private AutoCompleteTextView mLoginView;
     private EditText mPasswordView;
@@ -331,75 +334,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            // dziala !!!
-//
-//            String URL = "http://192.168.21.159:8080/rest/login";
-
-
-//            // Instantiate the RequestQueue.
-//            RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-//
-//            // Request a string response from the provided URL.
-//            StringRequest stringRequest = new StringRequest(Request.Method.POST, URL,
-//                    new Response.Listener<String>() {
-//                        @Override
-//                        public void onResponse(String response) {
-//                            ObjectMapper mapper = new ObjectMapper();
-//                            HashMap<String, String> responseHashMap = new HashMap<>();
-//                            String userId = null;
-//                            String token = null;
-//
-//                            try {
-//                                if(!response.equals("")) {
-//                                    responseHashMap = mapper.readValue(response, HashMap.class);
-//                                } else {
-//                                    // tutaj zwroc blad - uzytkownik podal zle dane logowania
-//                                }
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
-//                            }
-//                            if(responseHashMap.containsKey("userId")){
-//                                userId =  responseHashMap.get("userId");
-//                                token =  responseHashMap.get("token");
-//                            }
-//
-//                            Log.i("TAGOnResponse", "Odpowiedz: userId" + userId + " token: " + token);
-//                            //mLoginView.setText("Id uzytkownika: " + userId);
-//
-//                            if(userId != null) {
-//                                SharedPreferences sharedPref = getSharedPreferences("appPrefs", mContext.MODE_PRIVATE);
-//                                SharedPreferences.Editor editor = sharedPref.edit();
-//                                editor.putString("userId", userId);
-//                                editor.putString("token", token);
-//                                editor.commit();
-//
-//                                Log.i("TAGOnResponse", "SharedPreferences.userId: " + sharedPref.getString("userId", "")
-//                                        + " SharedPreferences.token: " + sharedPref.getString("token", ""));
-//                            }
-//                        }
-//                    }, new Response.ErrorListener() {
-//                @Override
-//                public void onErrorResponse(VolleyError error) {
-//                    mLoginView.setText("That didn't work!");
-//                    VolleyLog.d("TAGOnError " + error.getMessage(), "Error: " + error.getMessage());
-//                    Log.i("TAGOnResponse", error.getMessage());
-//                }
-//            }){
-//                protected Map<String, String> getParams() throws AuthFailureError {
-//                    Map<String, String> params = new HashMap<String, String>();
-//                    params.put("login", mLogin);
-//                    params.put("password", mPassword);
-//
-//                    return params;
-//                }};
-//
-//
-//            // Add the request to the RequestQueue.
-//            queue.add(stringRequest);
-
-
-
-            String URL = "http://192.168.0.18:8080/rest/login";
+            String URL = getString(R.string.server_url) + "/rest/login";
 
             Map<String, String> loginCredentials = new HashMap<String, String>();
             loginCredentials.put("login", mLogin);
@@ -428,7 +363,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 editor.putString("token", token);
                                 editor.commit();
 
-                                loginResult = true;
+                                // wyswietl MENU
+                                Intent intent = new Intent(getBaseContext(), MenuActivity.class);
+                                startActivity(intent);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -440,10 +377,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         public void onErrorResponse(VolleyError error) {
                             //Toast.makeText(mContext, "The login submitted does not exist.", Toast.LENGTH_LONG).show();
                             VolleyLog.d("TAGOnError " + error.getMessage(), "Error: " + error.getMessage());
-//                            Log.i("TAGOnError", error.getMessage());
                             showProgress(false);
 
-                            loginResult = false;
+                            // wyswietl toster z bledem
+                            Context context = getApplicationContext();
+                            CharSequence text = getString(R.string.error_wrong_credentials);
+                            int duration = Toast.LENGTH_LONG;
+                            Toast toast = Toast.makeText(context, text, duration);
+                            toast.setGravity(Gravity.TOP, 0, 150);
+                            toast.show();
                         }
                     }
             );
@@ -452,16 +394,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
 
 
-//            try {
-//                // Simulate network access.
-//                Thread.sleep(2000);
-//            } catch (InterruptedException e) {
-//                return false;
-//            }
-
-
             // TODO: register the new account here.
             // TODO: Obsluga blednego/poprawnego logowania - odczekanie na odpowiedz, a dopiero potem ustawianie flagi
+            Log.i("TAG", "doInBackground finished - now return true");
             return true;
         }
 
@@ -471,17 +406,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                //finish();
-                Intent intent = new Intent(getBaseContext(), MenuActivity.class);
-                startActivity(intent);
+//                //finish();
+//                Log.i("TAG", "onPostExecute started - now return new Intent");
+//
+//                Intent intent = new Intent(getBaseContext(), MenuActivity.class);
+//                startActivity(intent);
             } else {
-                Context context = getApplicationContext();
-                CharSequence text = getString(R.string.error_wrong_credentials);
-                int duration = Toast.LENGTH_LONG;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.setGravity(Gravity.TOP, 0, 150);
-                toast.show();
+//                Log.i("TAG", "onPostExecute started - now return Toaster");
+//
+//                Context context = getApplicationContext();
+//                CharSequence text = getString(R.string.error_wrong_credentials);
+//                int duration = Toast.LENGTH_LONG;
+//
+//                Toast toast = Toast.makeText(context, text, duration);
+//                toast.setGravity(Gravity.TOP, 0, 150);
+//                toast.show();
             }
         }
 

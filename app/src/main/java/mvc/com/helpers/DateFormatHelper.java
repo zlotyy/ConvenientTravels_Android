@@ -22,6 +22,10 @@ public class DateFormatHelper {
     DatePicker datepicker;
     TimePicker timepicker;
 
+
+
+
+
     public DateFormatHelper(DatePicker datepicker, String pattern){
         this.datepicker = datepicker;
         this.pattern = pattern;
@@ -31,6 +35,18 @@ public class DateFormatHelper {
         this.timepicker = timepicker;
         this.pattern = pattern;
     }
+
+    public DateFormatHelper(String date, String pattern){
+        this.date = date;
+        this.pattern = pattern;
+        calendar = Calendar.getInstance();
+    }
+
+    public DateFormatHelper(Calendar calendar, String pattern){
+        this.calendar = calendar;
+        this.pattern = pattern;
+    }
+
 
 
     /**
@@ -74,5 +90,68 @@ public class DateFormatHelper {
         }
 
         return calendar;
+    }
+
+
+    /**
+     * metoda zamienia Calendar na Stringa w podanym formacie
+     */
+    public String calendarToString_DateTimeFormat(){
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        date = format.format(calendar.getTime());
+
+        return date;
+    }
+
+
+
+
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getPattern() {
+        return pattern;
+    }
+
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
+    }
+
+    public Calendar getCalendar() {
+        return calendar;
+    }
+
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
+    }
+
+    public DatePicker getDatepicker() {
+        return datepicker;
+    }
+
+    public void setDatepicker(DatePicker datepicker) {
+        this.datepicker = datepicker;
+    }
+
+    public TimePicker getTimepicker() {
+        return timepicker;
+    }
+
+    public void setTimepicker(TimePicker timepicker) {
+        this.timepicker = timepicker;
     }
 }

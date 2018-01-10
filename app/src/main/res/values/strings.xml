@@ -1,5 +1,15 @@
 <resources>
+    <string name="server_url">http://192.168.1.44:8080</string>
+
     <string name="app_name">ConvenientTravels</string>
+    <string name="header_menu">ConvenientTravels Menu</string>
+    <string name="header_addnewdrive">Miejsce i czas wyjazdu</string>
+    <string name="header_addnewdrive_arrivaldetails">Miejsce docelowe</string>
+    <string name="header_addnewdrive_drivedetails">Szczegóły przejazdu</string>
+    <string name="header_searchdrive">Wyszukaj przejazd</string>
+    <string name="header_mydrives">Moje przejazdy</string>
+    <string name="header_mybookings">Moje rezerwacje</string>
+
 
     <!-- Strings related to login -->
     <string name="prompt_login">Login</string>
@@ -24,7 +34,6 @@
     <string name="prompt_street_arrival">Ulica docelowa</string>
     <string name="prompt_exact_place_arrival">Dokładne miejsce docelowe</string>
     <string name="label_date_start">Data wyjazdu</string>
-    <string name="header_add_new_drive">Dodaj przejazd</string>
     <string name="action_go_next">Przejdź dalej</string>
     <string name="prompt_driver_comment">Komentarz na temat przejazdu</string>
     <string name="prompt_passengers_quantity">Ilość pasażerów</string>
@@ -32,8 +41,10 @@
     <string name="checkbox_is_smoke_permitted">Można palić</string>
     <string name="checkbox_is_round_trip">Przejazd w obie strony</string>
     <string name="action_submit">Zatwierdź</string>
+
     <string name="error_add_new_drive">Nie udało się dodać przejazdu</string>
     <string name="success_add_new_drive">Dodano przejazd</string>
+    <string name="error_get_my_drives">Nie udało się pobrać przejazdów</string>
 
     <string-array name="luggage_array">
         <item>Maly</item>
