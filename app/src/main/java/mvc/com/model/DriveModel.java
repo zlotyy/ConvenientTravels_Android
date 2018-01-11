@@ -50,6 +50,36 @@ public class DriveModel implements Serializable {
 
 
 
+    public DriveModel() {
+    }
+
+    public DriveModel(long driveId, Calendar startDate, Calendar returnDate, Calendar insertDate, Calendar modificationDate, String searchData,
+                      String cityStart, String streetStart, String exactPlaceStart, String cityArrival, String streetArrival, String exactPlaceArrival,
+                      boolean isFreeWay, boolean isRoundTrip, int cost, boolean isDeleted, UserModel insertUser, List<BookingModel> bookings,
+                      List<StopOverPlaceModel> stopOverPlaces) {
+        this.driveId = driveId;
+        this.startDate = startDate;
+        this.returnDate = returnDate;
+        this.insertDate = insertDate;
+        this.modificationDate = modificationDate;
+        this.searchData = searchData;
+        this.cityStart = cityStart;
+        this.streetStart = streetStart;
+        this.exactPlaceStart = exactPlaceStart;
+        this.cityArrival = cityArrival;
+        this.streetArrival = streetArrival;
+        this.exactPlaceArrival = exactPlaceArrival;
+        this.isFreeWay = isFreeWay;
+        this.isRoundTrip = isRoundTrip;
+        this.cost = cost;
+        this.isDeleted = isDeleted;
+        this.insertUser = insertUser;
+        this.bookings = bookings;
+        this.stopOverPlaces = stopOverPlaces;
+    }
+
+
+
     public long getDriveId() {
         return driveId;
     }

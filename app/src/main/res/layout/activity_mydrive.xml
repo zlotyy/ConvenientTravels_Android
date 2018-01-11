@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="mvc.com.MyDriveActivity" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Miejsce wyjazdu"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            />
+
+        <TextView
+            android:id="@+id/mydrive_start_place"
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Krakow Majówny Olszanica"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Miejsce docelowe"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/mydrive_arrival_place"
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Krakow Majówny Olszanica"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Miejsca pośrednie"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/mydrive_stop_over_places"
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Krakow Majówny Olszanica\nMiechow Majówny Olszanica"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Czas wyjazdu"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/mydrive_start_date"
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="2018-08-02 22:00"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Ilość pasażerów"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/mydrive_passengers_quantity"
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="3"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Koszt"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/mydrive_cost"
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="13 zł"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Bagaż"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/mydrive_luggage"
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Mały"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Czy można palić"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/mydrive_smoke_permitted"
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Nie"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Przejazd w obie strony"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/mydrive_round_trip"
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Tak"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Czas powrotu"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/mydrive_return_date"
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="2018-09-10 10:00"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Komentarz kierowcy"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+
+        <TextView
+            android:id="@+id/mydrive_driver_comment"
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Wyjazd punktualnie"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp" >
+
+        <Button
+            android:id="@+id/mydrive_edit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Edytuj"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimaryDark"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp" />
+
+        <Button
+            android:id="@+id/mydrive_delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Usuń"
+            android:textColor="@android:color/white"
+            android:background="@android:color/holo_red_dark"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"  />
+    </LinearLayout>
+
+</LinearLayout>

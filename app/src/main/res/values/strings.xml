@@ -8,6 +8,8 @@
     <string name="header_addnewdrive_drivedetails">Szczegóły przejazdu</string>
     <string name="header_searchdrive">Wyszukaj przejazd</string>
     <string name="header_mydrives">Moje przejazdy</string>
+    <string name="header_mydrive">Szczegóły przejazdu</string>
+    <string name="header_mydrive_editdrive">Edytuj przejazd</string>
     <string name="header_mybookings">Moje rezerwacje</string>
 
 

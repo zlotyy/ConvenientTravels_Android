@@ -13,12 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -33,18 +30,14 @@ import com.android.volley.toolbox.Volley;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import mvc.com.helpers.DateFormatHelper;
+import mvc.com.adapters.CustomDriveAdapter;
 import mvc.com.model.DriveModel;
 
 /**
@@ -57,12 +50,15 @@ public class MyDrivesListActivity extends AppCompatActivity implements LoaderMan
 
     // UI references.
     private ListView mMyDrives;
-    private ArrayAdapter<String> adapter;
-
+    private CustomDriveAdapter adapter;
     List<DriveModel> myDrives = new ArrayList<>();
 
     public void setMyDrives(List<DriveModel> myDrives) {
         this.myDrives = myDrives;
+    }
+
+    public List<DriveModel> getMyDrives() {
+        return myDrives;
     }
 
     @Override
@@ -72,20 +68,18 @@ public class MyDrivesListActivity extends AppCompatActivity implements LoaderMan
 
         mMyDrives = (ListView) findViewById(R.id.my_drives_list_view);
 
-        new MyDrivesListTask(this).execute();
+        new MyDrivesListTask(this, getApplicationContext()).execute();
 
-        String drives[] = {"Mercedes", "Fiat", "Ferrari", "Aston Martin", "Lamborghini", "Skoda", "Volkswagen", "Audi", "Citroen",
-                "Fiat", "Ferrari", "Aston Martin", "Lamborghini", "Skoda", "Volkswagen", "Audi", "Citroen"};
+        mMyDrives.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                DriveModel drive = myDrives.get(position);
 
-//        ArrayList<String> drivesList = new ArrayList<>();
-//        for(DriveModel drive : myDrives){
-//            drivesList.add(drive.getCityStart());
-//        }
-////        drivesList.addAll(Arrays.asList(drives));
-//
-//        adapter = new ArrayAdapter<String>(this, R.layout.textview_mydrive_row, drivesList);
-//
-//        mMyDrives.setAdapter(adapter);
+                Intent intent = new Intent(getApplicationContext(), MyDriveActivity.class);
+                intent.putExtra("DriveId", drive.getDriveId());
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -98,8 +92,9 @@ public class MyDrivesListActivity extends AppCompatActivity implements LoaderMan
         private Context mContext;
         private MyDrivesListActivity activity;
 
-        MyDrivesListTask(MyDrivesListActivity activity) {
+        MyDrivesListTask(MyDrivesListActivity activity, Context context) {
             this.activity = activity;
+            mContext = context;
         }
 
         @Override
@@ -126,31 +121,14 @@ public class MyDrivesListActivity extends AppCompatActivity implements LoaderMan
                                 arrayJSON = (JSONArray) objectJSON.get("myDrivesList");
 
                                 // parsowanie arrayJSON na List<DriveModel>
-                                List<DriveModel> myDrives = new ArrayList<>();
+                                ArrayList<DriveModel> myDrives = new ArrayList<>();
                                 myDrives = mapper.readValue(String.valueOf(arrayJSON), mapType);
 
                                 // ustaw liste przejazdow
                                 activity.setMyDrives(myDrives);
 
-                                // wyswietl przejazdy na liscie
-                                ArrayList<String> drivesList = new ArrayList<>();
-                                for(DriveModel drive : myDrives){
-                                    DateFormatHelper dateFormatHelper = new DateFormatHelper(drive.getStartDate(), "yyyy-MM-dd HH:mm");
-                                    String startDate = dateFormatHelper.calendarToString_DateTimeFormat();
-
-                                    String element = startDate + " " + drive.getCityStart() + " -> " + drive.getCityArrival();
-                                    drivesList.add(element);
-                                }
-                                adapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.textview_mydrive_row, drivesList);
+                                adapter = new CustomDriveAdapter(myDrives, getApplicationContext());
                                 mMyDrives.setAdapter(adapter);
-
-                                // czynnosc po kliknieciu elementu
-                                mMyDrives.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                    public void onItemClick(AdapterView<?> parent, View view,
-                                                            int position, long id) {
-
-                                    }
-                                });
 
                             } catch (Exception e) {
                                 e.printStackTrace();
