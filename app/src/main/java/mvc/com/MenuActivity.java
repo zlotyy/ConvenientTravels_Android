@@ -49,6 +49,14 @@ public class MenuActivity extends AppCompatActivity implements LoaderCallbacks<C
         });
 
         Button mMyBookingsButton = (Button) findViewById(R.id.myBookings);
+        mMyBookingsButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MyBookingsListActivity.class);
+                startActivity(intent);
+            }
+        });
 
         Button mExitButton = (Button) findViewById(R.id.exit_button);
         mExitButton.setOnClickListener(new OnClickListener() {

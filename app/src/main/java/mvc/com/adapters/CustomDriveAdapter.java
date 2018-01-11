@@ -38,12 +38,6 @@ public class CustomDriveAdapter extends ArrayAdapter<DriveModel> implements View
 
     @Override
     public void onClick(View view) {
-//        int position =(Integer) view.getTag();
-//        Object object = getItem(position);
-//
-//        DriveModel drive = (DriveModel) object;
-
-        // zaimplementowac logike
 
     }
 
@@ -77,8 +71,8 @@ public class CustomDriveAdapter extends ArrayAdapter<DriveModel> implements View
         DateFormatHelper dateFormatHelper = new DateFormatHelper(drive.getStartDate(), "yyyy-MM-dd HH:mm");
         String startDate = dateFormatHelper.calendarToString_DateTimeFormat();
 
-        String startPlace = drive.getCityStart() + " " + drive.getStreetStart() + " " + drive.getExactPlaceStart();
-        String arrivalPlace = drive.getCityArrival() + " " + drive.getStreetArrival() + " " + drive.getExactPlaceArrival();
+        String startPlace = "z:  " + drive.getCityStart() + " " + drive.getStreetStart() + " " + drive.getExactPlaceStart();
+        String arrivalPlace = "do: " + drive.getCityArrival() + " " + drive.getStreetArrival() + " " + drive.getExactPlaceArrival();
 
         viewHolder.txtCityStart.setText(startPlace);
         viewHolder.txtCityArrival.setText(arrivalPlace);

@@ -69,6 +69,16 @@
             android:label="@string/header_mydrive_editdrive"
             android:parentActivityName=".MyDriveActivity" >
         </activity>
+        <activity
+            android:name=".MyBookingsListActivity"
+            android:label="@string/header_mybookings"
+            android:parentActivityName=".MenuActivity" >
+        </activity>
+        <activity
+            android:name=".MyBookingActivity"
+            android:label="@string/header_mydrive"
+            android:parentActivityName=".MyBookingsListActivity" >
+        </activity>
     </application>
 
 </manifest>

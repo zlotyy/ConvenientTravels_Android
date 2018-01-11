@@ -31,19 +31,17 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * Created by zloty on 2018-01-11.
  */
 
-public class MyDriveActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MyBookingActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String TAG = "MyDriveActivity";
+    private static final String TAG = "MyBookingActivity";
 
 
     private Long driveId;
-    private MyDriveActivity activity;
-
+    private MyBookingActivity activity;
 
     public Long getDriveId() {
         return driveId;
@@ -53,14 +51,16 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
         this.driveId = driveId;
     }
 
-
-    public MyDriveActivity getActivity() {
+    public MyBookingActivity getActivity() {
         return activity;
     }
 
-    public void setActivity(MyDriveActivity activity) {
+    public void setActivity(MyBookingActivity activity) {
         this.activity = activity;
     }
+
+
+
 
 
     // todo: referencje + wyswietlanie odpowiednich danych
@@ -70,32 +70,23 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mydrive);
+        setContentView(R.layout.activity_mybooking);
 
         Intent intent = getIntent();
         driveId = intent.getLongExtra("DriveId", -1);
         if(driveId == -1){
             Log.i("TAG", "myDrive_ID = " + driveId + ". Cos poszlo nie tak");
         } else {
-            Log.i("TAG", "myDrive_ID = " + driveId + ". Poprawnie wyswietlono szczegoly przejazdu");
+            Log.i("TAG", "myDrive_ID = " + driveId + ". Poprawnie wyswietlono szczegoly rezerwacji");
         }
 
-        Button mEditDriveButton = findViewById(R.id.mydrive_edit_button);
-        mEditDriveButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        Button mDeleteDriveButton = findViewById(R.id.mydrive_delete_button);
-        mDeleteDriveButton.setOnClickListener(new View.OnClickListener() {
+        Button mCancelBookingButton = findViewById(R.id.mybooking_cancel_button);
+        mCancelBookingButton.setOnClickListener(new View.OnClickListener() {
 
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(View v) {
-                new DeleteDriveTask(driveId, getApplicationContext()).execute((Void) null);
+                new CancelBookingTask(driveId, getApplicationContext()).execute((Void) null);
                 onNavigateUp();
             }
         });
@@ -103,13 +94,12 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
 
 
 
-
-    public class DeleteDriveTask extends AsyncTask<Void, Void, Boolean> {
+    public class CancelBookingTask extends AsyncTask<Void, Void, Boolean> {
 
         private Context mContext;
         private Long driveId;
 
-        DeleteDriveTask(Long driveId, Context context) {
+        CancelBookingTask(Long driveId, Context context) {
             this.driveId = driveId;
             mContext = context;
         }
@@ -117,7 +107,7 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            String URL = getString(R.string.server_url) + "/rest/myDrives/delete";
+            String URL = getString(R.string.server_url) + "/rest/myBookings/unbookDrive";
 
             Map<String, Long> driveId_Map = new HashMap<>();
             driveId_Map.put("driveId", driveId);
@@ -134,7 +124,7 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
 
                                 int duration = Toast.LENGTH_LONG;
 
-                                Toast toast = Toast.makeText(mContext, "Przejazd został usunięty", duration);
+                                Toast toast = Toast.makeText(mContext, "Rezerwacja została anulowana", duration);
                                 toast.setGravity(Gravity.BOTTOM, 0, 150);
                                 toast.show();
 
@@ -152,7 +142,7 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
                             CharSequence text = error.getMessage();
                             int duration = Toast.LENGTH_LONG;
 
-                            Toast toast = Toast.makeText(mContext, "Nie udało się usunąć przejazdu", duration);
+                            Toast toast = Toast.makeText(mContext, "Nie udało się anulować rezerwacji", duration);
                             toast.setGravity(Gravity.TOP, 0, 150);
                             toast.show();
                         }
@@ -189,7 +179,6 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
 
         }
     }
-
 
 
 

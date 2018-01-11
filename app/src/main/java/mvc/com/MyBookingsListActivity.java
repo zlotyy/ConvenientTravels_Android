@@ -1,6 +1,5 @@
 package mvc.com;
 
-import android.app.Activity;
 import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +13,6 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -41,41 +39,41 @@ import mvc.com.adapters.CustomDriveAdapter;
 import mvc.com.model.DriveModel;
 
 /**
- * Created by zloty on 2018-01-10.
+ * Created by zloty on 2018-01-11.
  */
 
-public class MyDrivesListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MyBookingsListActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String TAG = "MyDrivesListActivity";
+    private static final String TAG = "MyBookingsListActivity";
 
     // UI references.
-    private ListView mMyDrives;
+    private ListView mMyBookings;
     private CustomDriveAdapter adapter;
-    List<DriveModel> myDrives = new ArrayList<>();
+    List<DriveModel> myBookings = new ArrayList<>();
 
-    public void setMyDrives(List<DriveModel> myDrives) {
-        this.myDrives = myDrives;
+    public void setMyBookings(List<DriveModel> myBookings) {
+        this.myBookings = myBookings;
     }
 
-    public List<DriveModel> getMyDrives() {
-        return myDrives;
+    public List<DriveModel> getMyBookings() {
+        return myBookings;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mydriveslist);
+        setContentView(R.layout.activity_mybookingslist);
 
-        mMyDrives = (ListView) findViewById(R.id.my_drives_list_view);
+        mMyBookings = (ListView) findViewById(R.id.my_bookings_list_view);
 
-        new MyDrivesListTask(this, getApplicationContext()).execute();
+        new MyBookingsListTask(this, getApplicationContext()).execute();
 
-        mMyDrives.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mMyBookings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                DriveModel drive = myDrives.get(position);
+                DriveModel drive = myBookings.get(position);
 
-                Intent intent = new Intent(getApplicationContext(), MyDriveActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MyBookingActivity.class);
                 intent.putExtra("DriveId", drive.getDriveId());
                 startActivity(intent);
             }
@@ -87,12 +85,12 @@ public class MyDrivesListActivity extends AppCompatActivity implements LoaderMan
 
 
 
-    public class MyDrivesListTask extends AsyncTask<Void, Void, List<DriveModel>> {
+    public class MyBookingsListTask extends AsyncTask<Void, Void, List<DriveModel>> {
 
         private Context mContext;
-        private MyDrivesListActivity activity;
+        private MyBookingsListActivity activity;
 
-        MyDrivesListTask(MyDrivesListActivity activity, Context context) {
+        MyBookingsListTask(MyBookingsListActivity activity, Context context) {
             this.activity = activity;
             mContext = context;
         }
@@ -100,7 +98,7 @@ public class MyDrivesListActivity extends AppCompatActivity implements LoaderMan
         @Override
         protected List<DriveModel> doInBackground(final Void... params) {
 
-            String URL = getString(R.string.server_url) + "/rest/myDrives";
+            String URL = getString(R.string.server_url) + "/rest/myBookings";
 
 
             JsonObjectRequest postRequest = new JsonObjectRequest(Request.Method.GET, URL,
@@ -110,7 +108,7 @@ public class MyDrivesListActivity extends AppCompatActivity implements LoaderMan
                         public void onResponse(JSONObject response) {
 
                             try {
-                                Log.i("TAGOnResponse", "Poprawnie pobrano przejazdy z bazy" );
+                                Log.i("TAGOnResponse", "Poprawnie pobrano zarezerwowane przejazdy z bazy" );
 
                                 ObjectMapper mapper = new ObjectMapper();
                                 TypeReference<List<DriveModel>> mapType = new TypeReference<List<DriveModel>>() {};
@@ -118,17 +116,17 @@ public class MyDrivesListActivity extends AppCompatActivity implements LoaderMan
                                 // wyciaganie tablicy jsonow z response'a
                                 JSONArray arrayJSON = new JSONArray();
                                 JSONObject objectJSON = new JSONObject(String.valueOf(response));
-                                arrayJSON = (JSONArray) objectJSON.get("myDrivesList");
+                                arrayJSON = (JSONArray) objectJSON.get("myBookedDrivesList");
 
                                 // parsowanie arrayJSON na List<DriveModel>
-                                ArrayList<DriveModel> myDrives = new ArrayList<>();
-                                myDrives = mapper.readValue(String.valueOf(arrayJSON), mapType);
+                                ArrayList<DriveModel> myBookings = new ArrayList<>();
+                                myBookings = mapper.readValue(String.valueOf(arrayJSON), mapType);
 
                                 // ustaw liste przejazdow
-                                activity.setMyDrives(myDrives);
+                                activity.setMyBookings(myBookings);
 
-                                adapter = new CustomDriveAdapter(myDrives, getApplicationContext());
-                                mMyDrives.setAdapter(adapter);
+                                adapter = new CustomDriveAdapter(myBookings, getApplicationContext());
+                                mMyBookings.setAdapter(adapter);
 
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -172,7 +170,7 @@ public class MyDrivesListActivity extends AppCompatActivity implements LoaderMan
         }
 
         @Override
-        protected void onPostExecute(List<DriveModel> myDrives) {
+        protected void onPostExecute(List<DriveModel> myBookings) {
 
         }
 
