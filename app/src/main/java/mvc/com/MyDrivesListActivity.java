@@ -38,7 +38,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import mvc.com.adapters.CustomDriveAdapter;
+import mvc.com.dto.DriveDTO_String;
+import mvc.com.helpers.DateFormatHelper;
+import mvc.com.helpers.DriveParser;
 import mvc.com.model.DriveModel;
+import mvc.com.model.StopOverPlaceModel;
 
 /**
  * Created by zloty on 2018-01-10.
@@ -74,9 +78,12 @@ public class MyDrivesListActivity extends AppCompatActivity implements LoaderMan
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DriveModel drive = myDrives.get(position);
+                DriveDTO_String driveDTO_string = DriveParser.parseDriveModel_TO_DriveDTOString(drive);
 
                 Intent intent = new Intent(getApplicationContext(), MyDriveActivity.class);
+                intent.putExtra("Drive", driveDTO_string);
                 intent.putExtra("DriveId", drive.getDriveId());
+
                 startActivity(intent);
             }
         });

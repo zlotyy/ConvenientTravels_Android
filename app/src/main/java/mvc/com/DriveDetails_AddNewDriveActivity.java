@@ -38,15 +38,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 
 import mvc.com.dto.DriveDTO;
 import mvc.com.dto.DriveDTO_String;
-import mvc.com.enums.LuggageSize;
 import mvc.com.helpers.DateFormatHelper;
-import mvc.com.model.StopOverPlaceModel;
+import mvc.com.helpers.DriveParser;
+
+import static mvc.com.helpers.DriveParser.parseDriveDTOString_TO_DriveDTO;
 
 /**
  * Created by zloty on 2018-01-09.
@@ -133,7 +132,7 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
                 //drive.setLuggageSize(mLuggageSpinner.getSelectedItem().toString());
                 drive.setIsSmokePermitted(isSmokePermitted);
 
-                DriveDTO driveDTO = parseToDriveDTO(drive);
+                DriveDTO driveDTO = parseDriveDTOString_TO_DriveDTO(drive);
 
                 new AddNewDriveTask(driveDTO, getApplicationContext()).execute((Void) null);
             }
@@ -142,55 +141,6 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
         mDriveDetailsNewDriveFormView = findViewById(R.id.drive_details_new_drive_form);
 
     }
-
-    private DriveDTO parseToDriveDTO(DriveDTO_String drive){
-        DriveDTO driveDTO = new DriveDTO();
-
-        driveDTO.setCityStart(drive.getCityStart());
-        driveDTO.setStreetStart(drive.getStreetStart());
-        driveDTO.setExactPlaceStart(drive.getExactPlaceStart());
-        driveDTO.setCityArrival(drive.getCityArrival());
-        driveDTO.setStreetArrival(drive.getStreetArrival());
-        driveDTO.setExactPlaceArrival(drive.getExactPlaceArrival());
-        driveDTO.setStartDate(drive.getStartDate());
-        driveDTO.setReturnDate(drive.getReturnDate());
-        driveDTO.setIsRoundTrip(drive.getIsRoundTrip());
-        driveDTO.setIsSmokePermitted(drive.getIsSmokePermitted());
-        driveDTO.setDriverComment(drive.getDriverComment());
-
-        if(!drive.getCost().equals("")) {
-            driveDTO.setCost(Integer.parseInt(drive.getCost()));
-        } else {
-            driveDTO.setCost(0);
-        }
-
-        if(!drive.getPassengersQuantity().equals("")){
-            driveDTO.setPassengersQuantity(Integer.parseInt(drive.getPassengersQuantity()));
-        } else {
-            driveDTO.setPassengersQuantity(0);
-        }
-
-        if(drive.getLuggageSize() != null) {
-            if (drive.getLuggageSize().equals("Maly")) {
-                driveDTO.setLuggageSize(LuggageSize.MALY);
-            } else if (drive.getLuggageSize().equals("Sredni")) {
-                driveDTO.setLuggageSize(LuggageSize.SREDNI);
-            } else if (drive.getLuggageSize().equals("Duzy")) {
-                driveDTO.setLuggageSize(LuggageSize.DUZY);
-            } else {
-                driveDTO.setLuggageSize(null);
-            }
-        } else {
-            driveDTO.setLuggageSize(null);
-        }
-
-        driveDTO.setStopOverPlaces(Collections.<StopOverPlaceModel>emptyList());
-
-
-        return driveDTO;
-    }
-
-
 
 
 

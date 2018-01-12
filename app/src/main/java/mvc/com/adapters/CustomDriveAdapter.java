@@ -67,12 +67,20 @@ public class CustomDriveAdapter extends ArrayAdapter<DriveModel> implements View
             result = convertView;
         }
 
+        String cityStart = drive.getCityStart() != null ? drive.getCityStart() : "";
+        String streetStart = drive.getStreetStart() != null ? drive.getStreetStart() : "";
+        String exactPlaceStart = drive.getExactPlaceStart() != null ? drive.getExactPlaceStart() : "";
+
+        String cityArrival = drive.getCityArrival() != null ? drive.getCityArrival() : "";
+        String streetArrival = drive.getStreetArrival() != null ? drive.getStreetArrival() : "";
+        String exactPlaceArrival = drive.getExactPlaceArrival() != null ? drive.getExactPlaceArrival() : "";
+
         // parsowanie daty na stringa
         DateFormatHelper dateFormatHelper = new DateFormatHelper(drive.getStartDate(), "yyyy-MM-dd HH:mm");
         String startDate = dateFormatHelper.calendarToString_DateTimeFormat();
 
-        String startPlace = "z:  " + drive.getCityStart() + " " + drive.getStreetStart() + " " + drive.getExactPlaceStart();
-        String arrivalPlace = "do: " + drive.getCityArrival() + " " + drive.getStreetArrival() + " " + drive.getExactPlaceArrival();
+        String startPlace = "z:  " + cityStart + " " + streetStart + " " + exactPlaceStart;
+        String arrivalPlace = "do: " + cityArrival + " " + streetArrival + " " + exactPlaceArrival;
 
         viewHolder.txtCityStart.setText(startPlace);
         viewHolder.txtCityArrival.setText(arrivalPlace);

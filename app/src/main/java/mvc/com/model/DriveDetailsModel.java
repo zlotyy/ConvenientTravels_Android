@@ -136,7 +136,7 @@ public class DriveDetailsModel implements Serializable {
                 ", prefferedMale=" + prefferedMale +
                 ", driverComment='" + driverComment + '\'' +
 //                ", passengersComments=" + passengersComments +
-                ", drive=" + drive +
+//                ", drive=" + drive +
                 '}';
     }
 }

@@ -52,12 +52,7 @@ public class UserModel implements Serializable {
     // Polaczenie 1 User do N Rezerwacji
     private List<BookingModel> bookings;
 
-    // Polaczenie 1 User do N Sesji
-    private List<SessionActualModel> sessionActual;
 
-    private List<MessageModel> message_sender;
-
-    private List<MessageModel> message_receiver;
 
 
     public long getUserId() {
@@ -218,30 +213,6 @@ public class UserModel implements Serializable {
 
     public void setBookings(List<BookingModel> bookings) {
         this.bookings = bookings;
-    }
-
-    public List<SessionActualModel> getSessionActual() {
-        return sessionActual;
-    }
-
-    public void setSessionActual(List<SessionActualModel> sessionActual) {
-        this.sessionActual = sessionActual;
-    }
-
-    public List<MessageModel> getMessage_sender() {
-        return message_sender;
-    }
-
-    public void setMessage_sender(List<MessageModel> message_sender) {
-        this.message_sender = message_sender;
-    }
-
-    public List<MessageModel> getMessage_receiver() {
-        return message_receiver;
-    }
-
-    public void setMessage_receiver(List<MessageModel> message_receiver) {
-        this.message_receiver = message_receiver;
     }
 
     @Override

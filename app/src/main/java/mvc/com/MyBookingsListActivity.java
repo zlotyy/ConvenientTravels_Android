@@ -115,8 +115,8 @@ public class MyBookingsListActivity extends AppCompatActivity implements LoaderM
 
                                 // wyciaganie tablicy jsonow z response'a
                                 JSONArray arrayJSON = new JSONArray();
-                                JSONObject objectJSON = new JSONObject(String.valueOf(response));
-                                arrayJSON = (JSONArray) objectJSON.get("myBookedDrivesList");
+                                //JSONObject objectJSON = new JSONObject(String.valueOf(response));       //czy na pewno? przeciez response to JSONObject...
+                                arrayJSON = (JSONArray) response.get("myBookedDrivesList");
 
                                 // parsowanie arrayJSON na List<DriveModel>
                                 ArrayList<DriveModel> myBookings = new ArrayList<>();
