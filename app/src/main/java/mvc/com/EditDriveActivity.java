@@ -14,13 +14,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -42,123 +39,108 @@ import java.util.HashMap;
 
 import mvc.com.dto.DriveDTO;
 import mvc.com.dto.DriveDTO_String;
-import mvc.com.helpers.DateFormatHelper;
-import mvc.com.helpers.DriveParser;
 
 import static mvc.com.helpers.DriveParser.parseDriveDTOString_TO_DriveDTO;
 
 /**
- * Created by zloty on 2018-01-09.
+ * Created by zloty on 2018-01-11.
  */
 
-public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class EditDriveActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private Context mContext;
-    private static final String TAG = "DriveDetails_AddNewDriveActivity";
+    private static final String TAG = "EditDriveActivity";
+    DriveDTO_String drive;
+    Long driveId;
+    EditDriveActivity activity;
+
 
     // UI references.
-    private View mDriveDetailsNewDriveFormView;
-    private EditText mDriverCommentView;
-    private EditText mPassengersQuantityView;
-    private EditText mCostView;
-    private Spinner mLuggageSpinner;
-    private CheckBox mSmokePermittedCheckbox;
-    private CheckBox mRoundTripCheckbox;
-    private DatePicker mDatePickerReturnDate;
-    private TimePicker mTimePickerReturnDate;
-
+    private View mNewDriveFormView;
+    private EditText mCityStartView;
+    private EditText mStreetStartView;
+    private EditText mExactPlaceStartView;
+    private TextView mDateStartLabel;
+    private DatePicker mDatePickerStartDate;
+    private TimePicker mTimePickerStartDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_addnewdrive_drivedetails);
+        setContentView(R.layout.activity_editdrive);
 
-        mDriverCommentView = findViewById(R.id.driver_comment);
-        mPassengersQuantityView = findViewById(R.id.passengers_quantity);
-        mCostView = findViewById(R.id.cost);
-        mLuggageSpinner = findViewById(R.id.luggage);
-        mSmokePermittedCheckbox = findViewById(R.id.smoke_permitted_checkbox);
-        mRoundTripCheckbox = findViewById(R.id.round_trip_checkbox);
-        mDatePickerReturnDate = findViewById(R.id.datePicker_returnDate);
-        mTimePickerReturnDate = findViewById(R.id.timePicker_returnDate);
 
-        final Spinner mLuggageSpinner = (Spinner) findViewById(R.id.luggage);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.luggage_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mLuggageSpinner.setAdapter(adapter);
+        mCityStartView = findViewById(R.id.editdrive_city_start);
+        mStreetStartView = findViewById(R.id.editdrive_street_start);
+        mExactPlaceStartView = findViewById(R.id.editdrive_exact_place_start);
+        mDateStartLabel = findViewById(R.id.editdrive_date_start_label);
+        mDatePickerStartDate = findViewById(R.id.editdrive_datePicker_startdate);
+        mTimePickerStartDate = findViewById(R.id.editdrive_timePicker_startdate);
 
-        Button mSubmitNewDriveButton = findViewById(R.id.submit_new_drive_button);
-        mSubmitNewDriveButton.setOnClickListener(new OnClickListener() {
+        Intent intent = getIntent();
+        drive = intent.getParcelableExtra("Drive");
+        driveId = intent.getLongExtra("DriveId", -1);
 
-            @RequiresApi(api = Build.VERSION_CODES.M)
+        if(driveId == -1){
+            Log.i("TAG", "drive = null. Cos poszlo nie tak");
+
+            int duration = Toast.LENGTH_LONG;
+
+            Toast toast = Toast.makeText(getApplicationContext(), "Błąd podczas wyświetlania danych przejazdu", duration);
+            toast.setGravity(Gravity.TOP, 0, 150);
+            toast.show();
+        } else {
+            Log.i("TAG", "Poprawnie wyswietlono szczegoly przejazdu");
+            mCityStartView.setText(drive.getCityStart());
+            mStreetStartView.setText(drive.getStreetStart());
+            mExactPlaceStartView.setText(drive.getStreetStart());
+        }
+
+
+        Button mEditDriveAcceptStartDetailsButton = findViewById(R.id.editdrive_accept_start_details_button);
+        mEditDriveAcceptStartDetailsButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                // odebranie obiektu z poprzedniego kroku formularza
-                Intent intent = getIntent();
-                DriveDTO_String drive = intent.getParcelableExtra("Drive");
+                drive.setCityStart(mCityStartView.getText().toString());
+                drive.setStreetStart(mStreetStartView.getText().toString());
+                drive.setExactPlaceStart(mExactPlaceStartView.getText().toString());
 
-                String isSmokePermitted = "false";
-                String isRoundTrip = "false";
-
-                if(mSmokePermittedCheckbox.isChecked()){
-                    isSmokePermitted = "true";
-                }
-                if(mRoundTripCheckbox.isChecked()){
-                    isRoundTrip = "true";
-
-                    // parsowanie daty i czasu i dodanie do obiektu drive
-                    String returnDate;
-                    String returnTime;
-                    String returnDateTime;
-
-                    // parsowanie datepickera na stringa
-                    DateFormatHelper dateHelper = new DateFormatHelper(mDatePickerReturnDate, "yyyy-MM-dd");
-                    returnDate = dateHelper.datepickerToString_DateFormat();
-
-                    // parsowanie timepickera na stringa
-                    DateFormatHelper timeHelper = new DateFormatHelper(mTimePickerReturnDate, "HH:mm");
-                    returnTime = timeHelper.timepickerToString_DateFormat();
-
-                    returnDateTime = returnDate + " " + returnTime;
-
-                    drive.setIsRoundTrip(isRoundTrip);
-                    drive.setReturnDate(returnDateTime);
-                }
-
-                drive.setDriverComment(mDriverCommentView.getText().toString());
-                drive.setPassengersQuantity(mPassengersQuantityView.getText().toString());
-                drive.setCost(mCostView.getText().toString());
-                //drive.setLuggageSize(mLuggageSpinner.getSelectedItem().toString());
-                drive.setIsSmokePermitted(isSmokePermitted);
+                // todo: data i czas
+                // todo: NAPRAWIC BLEDY NA SZCZEGOLACH PRZEJAZDU (NULLE CHYBA)
 
                 DriveDTO driveDTO = parseDriveDTOString_TO_DriveDTO(drive);
 
-                new AddNewDriveTask(driveDTO, getApplicationContext()).execute((Void) null);
+                new EditDriveTask(activity, driveDTO, driveId, getApplicationContext()).execute();
             }
         });
 
-        mDriveDetailsNewDriveFormView = findViewById(R.id.drive_details_new_drive_form);
+
+        mNewDriveFormView = findViewById(R.id.editdrive_drive_form);
 
     }
 
 
 
 
-    public class AddNewDriveTask extends AsyncTask<Void, Void, Boolean> {
 
+    public class EditDriveTask extends AsyncTask<Void, Void, Boolean> {
+
+        EditDriveActivity activity;
+        private Long driveId;
         private final DriveDTO driveDTO;
         private Context mContext;
 
-        AddNewDriveTask(DriveDTO driveDTO, Context context) {
+        EditDriveTask(EditDriveActivity activity, DriveDTO driveDTO, Long driveId, Context context) {
+            this.activity = activity;
             this.driveDTO = driveDTO;
+            this.driveId = driveId;
             mContext = context;
         }
 
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            String URL = getString(R.string.server_url) + "/rest/addNewDrive";
+            String URL = getString(R.string.server_url) + "/rest/editDrive";
 
             // parsowanie na DriveDTO
             JSONObject jsonDrive = new JSONObject();
@@ -180,17 +162,16 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
                         public void onResponse(JSONObject response) {
 
                             try {
-                                Log.i("TAGOnResponse", "Poprawnie dodano przejazd do bazy danych" );
+                                Log.i("TAGOnResponse", "Poprawnie edytowano przejazd" );
 
                                 CharSequence text = getString(R.string.success_add_new_drive);
                                 int duration = Toast.LENGTH_LONG;
 
-                                Toast toast = Toast.makeText(mContext, text, duration);
+                                Toast toast = Toast.makeText(mContext, "Zmiany zostały zapisane", duration);
                                 toast.setGravity(Gravity.BOTTOM, 0, 150);
                                 toast.show();
 
-                                Intent intent = new Intent(getBaseContext(), MenuActivity.class);
-                                startActivity(intent);
+                                onNavigateUp();
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -206,7 +187,7 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
                             CharSequence text = error.getMessage();
                             int duration = Toast.LENGTH_LONG;
 
-                            Toast toast = Toast.makeText(mContext, text, duration);
+                            Toast toast = Toast.makeText(mContext, "Błąd podczas zapisywania zmian", duration);
                             toast.setGravity(Gravity.TOP, 0, 150);
                             toast.show();
                         }
@@ -223,6 +204,7 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
                     //headers.put("Content-Type", "application/json");
                     headers.put("userid", userId);
                     headers.put("token", token);
+                    headers.put("driveid", Long.toString(driveId));
 
                     return headers;
                 }
@@ -248,7 +230,6 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
 
 
 
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return null;
@@ -264,4 +245,31 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
 
     }
 
+
+
+
+
+    public Long getDriveId() {
+        return driveId;
+    }
+
+    public void setDriveId(Long driveId) {
+        this.driveId = driveId;
+    }
+
+    public DriveDTO_String getDrive() {
+        return drive;
+    }
+
+    public void setDrive(DriveDTO_String drive) {
+        this.drive = drive;
+    }
+
+    public EditDriveActivity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(EditDriveActivity activity) {
+        this.activity = activity;
+    }
 }

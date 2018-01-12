@@ -36,6 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import mvc.com.adapters.CustomDriveAdapter;
+import mvc.com.dto.DriveDTO_String;
+import mvc.com.helpers.DriveParser;
 import mvc.com.model.DriveModel;
 
 /**
@@ -72,9 +74,12 @@ public class MyBookingsListActivity extends AppCompatActivity implements LoaderM
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DriveModel drive = myBookings.get(position);
+                DriveDTO_String driveDTO_string = DriveParser.parseDriveModel_TO_DriveDTOString(drive);
 
                 Intent intent = new Intent(getApplicationContext(), MyBookingActivity.class);
+                intent.putExtra("Drive", driveDTO_string);
                 intent.putExtra("DriveId", drive.getDriveId());
+
                 startActivity(intent);
             }
         });

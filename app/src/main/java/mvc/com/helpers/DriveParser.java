@@ -23,6 +23,8 @@ public class DriveParser {
      */
     public static DriveDTO parseDriveDTOString_TO_DriveDTO(DriveDTO_String driveDTO_String){
 
+        // todo: stopoverplaces
+
         DriveDTO driveDTO = new DriveDTO();
 
         driveDTO.setCityStart(driveDTO_String.getCityStart());
@@ -33,9 +35,14 @@ public class DriveParser {
         driveDTO.setExactPlaceArrival(driveDTO_String.getExactPlaceArrival());
         driveDTO.setStartDate(driveDTO_String.getStartDate());
         driveDTO.setReturnDate(driveDTO_String.getReturnDate());
-        driveDTO.setIsRoundTrip(driveDTO_String.getIsRoundTrip());
-        driveDTO.setIsSmokePermitted(driveDTO_String.getIsSmokePermitted());
         driveDTO.setDriverComment(driveDTO_String.getDriverComment());
+
+        if(driveDTO_String.getIsRoundTrip().equals("Tak") || driveDTO_String.getIsRoundTrip().equals("true")){
+            driveDTO.setIsRoundTrip("true");
+        }
+        if(driveDTO_String.getIsSmokePermitted().equals("Tak") || driveDTO_String.getIsSmokePermitted().equals("true")) {
+            driveDTO.setIsSmokePermitted("true");
+        }
 
         if(!driveDTO_String.getCost().equals("")) {
             driveDTO.setCost(Integer.parseInt(driveDTO_String.getCost()));

@@ -55,11 +55,7 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
     MyDriveActivity activity;
     DriveDTO_String drive;
     private Long driveId;
-//    private DriveDetailsModel driveDetails;
 
-
-
-    // todo: referencje + wyswietlanie odpowiednich danych
 
     // UI references.
     private TextView mStartPlace;
@@ -94,12 +90,9 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
         mDriverComment = findViewById(R.id.mydrive_driver_comment);
 
 
-
-
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
         drive = intent.getParcelableExtra("Drive");
         driveId = intent.getLongExtra("DriveId", -1);
-
 
         if(driveId == -1){
             Log.i("TAG", "drive = null. Cos poszlo nie tak");
@@ -113,10 +106,6 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
             Log.i("TAG", "Poprawnie wyswietlono szczegoly przejazdu");
 
             new GetDriveDetailsTask(this, drive, driveId, getApplicationContext()).execute();
-
-
-
-
         }
 
         Button mEditDriveButton = findViewById(R.id.mydrive_edit_button);
@@ -124,7 +113,11 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
 
             @Override
             public void onClick(View v) {
+                Intent editDriveIntent = new Intent(getApplicationContext(), EditDriveActivity.class);
+                editDriveIntent.putExtra("Drive", drive);
+                editDriveIntent.putExtra("DriveId", driveId);
 
+                startActivity(editDriveIntent);
             }
         });
 
@@ -250,7 +243,7 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            String URL = getString(R.string.server_url) + "/rest/myDrives/getDriveDetails";
+            String URL = getString(R.string.server_url) + "/rest/getDriveDetails";
 
             Map<String, Long> driveId_Map = new HashMap<>();
             driveId_Map.put("driveId", driveId);

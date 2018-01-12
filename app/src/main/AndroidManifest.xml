@@ -65,7 +65,7 @@
             android:parentActivityName=".MyDrivesListActivity" >
         </activity>
         <activity
-            android:name=".MyDrive_EditDriveActivity"
+            android:name=".EditDriveActivity"
             android:label="@string/header_mydrive_editdrive"
             android:parentActivityName=".MyDriveActivity" >
         </activity>
