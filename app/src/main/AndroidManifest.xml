@@ -70,6 +70,11 @@
             android:parentActivityName=".MyDriveActivity" >
         </activity>
         <activity
+            android:name=".ArrivalDetails_EditDriveActivity"
+            android:label="@string/header_mydrive_editdrive"
+            android:parentActivityName=".MyDriveActivity" >
+        </activity>
+        <activity
             android:name=".MyBookingsListActivity"
             android:label="@string/header_mybookings"
             android:parentActivityName=".MenuActivity" >

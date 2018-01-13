@@ -7,18 +7,13 @@ import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -35,49 +30,41 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.HashMap;
 
 import mvc.com.dto.DriveDTO;
 import mvc.com.dto.DriveDTO_String;
-import mvc.com.helpers.DateFormatHelper;
 
 import static mvc.com.helpers.DriveParser.parseDriveDTOString_TO_DriveDTO;
 
 /**
- * Created by zloty on 2018-01-11.
+ * Created by zloty on 2018-01-13.
  */
 
-public class EditDriveActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class ArrivalDetails_EditDriveActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String TAG = "EditDriveActivity";
+    private static final String TAG = "ArrivalDetails_EditDriveActivity";
     DriveDTO_String drive;
     Long driveId;
-    EditDriveActivity activity;
+    ArrivalDetails_EditDriveActivity activity;
 
 
     // UI references.
-    private View mEditDriveFormView;
-    private EditText mCityStartView;
-    private EditText mStreetStartView;
-    private EditText mExactPlaceStartView;
-    private TextView mDateStartLabel;
-    private DatePicker mDatePickerStartDate;
-    private TimePicker mTimePickerStartDate;
+    private View mArrivalDetails_EditDriveFormView;
+    private EditText mCityArrivalView;
+    private EditText mStreetArrivalView;
+    private EditText mExactPlaceAriivalView;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    @Override
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editdrive);
+        setContentView(R.layout.activity_editdrive_arrivaldetails);
 
 
-        mCityStartView = findViewById(R.id.editdrive_city_start);
-        mStreetStartView = findViewById(R.id.editdrive_street_start);
-        mExactPlaceStartView = findViewById(R.id.editdrive_exact_place_start);
-        mDateStartLabel = findViewById(R.id.editdrive_date_start_label);
-        mDatePickerStartDate = findViewById(R.id.editdrive_datePicker_startdate);
-        mTimePickerStartDate = findViewById(R.id.editdrive_timePicker_startdate);
+        mCityArrivalView = findViewById(R.id.editdrive_city_arrival);
+        mStreetArrivalView = findViewById(R.id.editdrive_street_arrival);
+        mExactPlaceAriivalView = findViewById(R.id.editdrive_exact_place_arrival);
 
         Intent intent = getIntent();
         drive = intent.getParcelableExtra("Drive");
@@ -94,46 +81,23 @@ public class EditDriveActivity extends AppCompatActivity implements LoaderManage
         } else {
             Log.i("TAG", "Poprawnie wyswietlono szczegoly przejazdu");
 
-            Calendar startDateTime = Calendar.getInstance();
-            String startDateTime_String = drive.getStartDate();
 
-            if(startDateTime_String != null){
-                DateFormatHelper dateFormatHelper = new DateFormatHelper(startDateTime_String, "yyyy-MM-dd HH:mm");
-                startDateTime = dateFormatHelper.stringToCalendar_DateTimeFormat();
-
-                mDatePickerStartDate.updateDate(startDateTime.get(Calendar.YEAR), startDateTime.get(Calendar.MONTH) - 1, startDateTime.get(Calendar.DATE));
-                mTimePickerStartDate.setHour(startDateTime.get(Calendar.HOUR_OF_DAY));
-                mTimePickerStartDate.setMinute(startDateTime.get(Calendar.MINUTE));
-            }
-            mCityStartView.setText(drive.getCityStart());
-            mStreetStartView.setText(drive.getStreetStart());
-            mExactPlaceStartView.setText(drive.getStreetStart());
+            mCityArrivalView.setText(drive.getCityArrival());
+            mStreetArrivalView.setText(drive.getStreetArrival());
+            mExactPlaceAriivalView.setText(drive.getExactPlaceArrival());
         }
 
 
-        Button mEditDriveAcceptStartDetailsButton = findViewById(R.id.editdrive_accept_start_details_button);
-        mEditDriveAcceptStartDetailsButton.setOnClickListener(new View.OnClickListener() {
+        Button mEditDriveAcceptArrivalDetailsButton = findViewById(R.id.editdrive_accept_arrival_details_button);
+        mEditDriveAcceptArrivalDetailsButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                String startDate;
-                String startTime;
-                String startDateTime;
 
-                // parsowanie datepickera na stringa
-                DateFormatHelper dateHelper = new DateFormatHelper(mDatePickerStartDate, "yyyy-MM-dd");
-                startDate = dateHelper.datepickerToString_DateFormat();
+                drive.setCityArrival(mCityArrivalView.getText().toString());
+                drive.setStreetArrival(mStreetArrivalView.getText().toString());
+                drive.setExactPlaceArrival(mExactPlaceAriivalView.getText().toString());
 
-                // parsowanie timepickera na stringa
-                DateFormatHelper timeHelper = new DateFormatHelper(mTimePickerStartDate, "HH:mm");
-                startTime = timeHelper.timepickerToString_DateFormat();
-
-                startDateTime = startDate + " " + startTime;
-
-                drive.setCityStart(mCityStartView.getText().toString());
-                drive.setStreetStart(mStreetStartView.getText().toString());
-                drive.setExactPlaceStart(mExactPlaceStartView.getText().toString());
-                drive.setStartDate(startDate);
 
                 DriveDTO driveDTO = parseDriveDTOString_TO_DriveDTO(drive);
 
@@ -142,7 +106,7 @@ public class EditDriveActivity extends AppCompatActivity implements LoaderManage
         });
 
 
-        mEditDriveFormView = findViewById(R.id.editdrive_drive_form);
+        mArrivalDetails_EditDriveFormView = findViewById(R.id.editdrive_drive_form);
 
     }
 
@@ -152,12 +116,12 @@ public class EditDriveActivity extends AppCompatActivity implements LoaderManage
 
     public class EditDriveTask extends AsyncTask<Void, Void, Boolean> {
 
-        EditDriveActivity activity;
+        ArrivalDetails_EditDriveActivity activity;
         private Long driveId;
         private final DriveDTO driveDTO;
         private Context mContext;
 
-        EditDriveTask(EditDriveActivity activity, DriveDTO driveDTO, Long driveId, Context context) {
+        EditDriveTask(ArrivalDetails_EditDriveActivity activity, DriveDTO driveDTO, Long driveId, Context context) {
             this.activity = activity;
             this.driveDTO = driveDTO;
             this.driveId = driveId;
@@ -294,11 +258,11 @@ public class EditDriveActivity extends AppCompatActivity implements LoaderManage
         this.drive = drive;
     }
 
-    public EditDriveActivity getActivity() {
+    public ArrivalDetails_EditDriveActivity getActivity() {
         return activity;
     }
 
-    public void setActivity(EditDriveActivity activity) {
+    public void setActivity(ArrivalDetails_EditDriveActivity activity) {
         this.activity = activity;
     }
 }

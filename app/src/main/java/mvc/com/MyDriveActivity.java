@@ -121,6 +121,32 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
             }
         });
 
+        Button mEditDriveArrivalDetailsButton = findViewById(R.id.mydrive_editarrivaldetails_button);
+        mEditDriveArrivalDetailsButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent editDriveIntent = new Intent(getApplicationContext(), ArrivalDetails_EditDriveActivity.class);
+                editDriveIntent.putExtra("Drive", drive);
+                editDriveIntent.putExtra("DriveId", driveId);
+
+                startActivity(editDriveIntent);
+            }
+        });
+
+        Button mEditDriveDetailsButton = findViewById(R.id.mydrive_editdrivedetails_button);
+        mEditDriveDetailsButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent editDriveIntent = new Intent(getApplicationContext(), EditDriveActivity.class);
+                editDriveIntent.putExtra("Drive", drive);
+                editDriveIntent.putExtra("DriveId", driveId);
+
+                startActivity(editDriveIntent);
+            }
+        });
+
         Button mDeleteDriveButton = findViewById(R.id.mydrive_delete_button);
         mDeleteDriveButton.setOnClickListener(new View.OnClickListener() {
 

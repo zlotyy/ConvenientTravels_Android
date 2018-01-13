@@ -261,10 +261,39 @@
 
         <Button
             android:id="@+id/mydrive_edit_button"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/activity_horizontal_margin"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Edytuj"
+            android:text="Edytuj miejsce i czas wyjazdu"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimaryDark"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp" />
+
+        <Button
+            android:id="@+id/mydrive_editarrivaldetails_button"
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Edytuj miejsce docelowe"
+            android:textColor="@android:color/white"
+            android:background="@color/colorPrimaryDark"
+            android:layout_marginStart="15dp"
+            android:layout_marginLeft="15dp"  />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp" >
+
+        <Button
+            android:id="@+id/mydrive_editdrivedetails_button"
+            android:layout_width="@dimen/activity_horizontal_margin"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Edytuj szczegóły przejazdu"
             android:textColor="@android:color/white"
             android:background="@color/colorPrimaryDark"
             android:layout_marginEnd="15dp"
@@ -272,10 +301,10 @@
 
         <Button
             android:id="@+id/mydrive_delete_button"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/activity_horizontal_margin"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Usuń"
+            android:text="Usuń\nprzejazd"
             android:textColor="@android:color/white"
             android:background="@android:color/holo_red_dark"
             android:layout_marginStart="15dp"
