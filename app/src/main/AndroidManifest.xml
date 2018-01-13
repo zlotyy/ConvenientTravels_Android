@@ -89,6 +89,21 @@
             android:label="@string/header_mydrive"
             android:parentActivityName=".MyBookingsListActivity" >
         </activity>
+        <activity
+            android:name=".SearchDriveActivity"
+            android:label="@string/header_searchdrive"
+            android:parentActivityName=".MenuActivity" >
+        </activity>
+        <activity
+            android:name=".SearchedDrivesListActivity"
+            android:label="@string/header_mybookings"
+            android:parentActivityName=".SearchDriveActivity" >
+        </activity>
+        <activity
+            android:name=".BookDriveActivity"
+            android:label="@string/header_mydrive"
+            android:parentActivityName=".SearchedDrivesListActivity" >
+        </activity>
     </application>
 
 </manifest>

@@ -32,21 +32,19 @@ import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import mvc.com.dto.DriveDTO_String;
 import mvc.com.enums.LuggageSize;
 import mvc.com.model.DriveDetailsModel;
 
-
 /**
- * Created by zloty on 2018-01-11.
+ * Created by zloty on 2018-01-13.
  */
 
-public class MyDriveActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class BookDriveActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private static final String TAG = "MyDriveActivity";
+    private static final String TAG = "BookDriveActivity";
 
 
     MyDriveActivity activity;
@@ -71,20 +69,20 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mydrive);
+        setContentView(R.layout.activity_bookdrive);
 
 
-        mStartPlace = findViewById(R.id.mydrive_start_place);
-        mArrivalPlace = findViewById(R.id.mydrive_arrival_place);
-        mStopOverPlaces = findViewById(R.id.mydrive_stop_over_places);
-        mStartDate = findViewById(R.id.mydrive_start_date);
-        mPassengersQuantity = findViewById(R.id.mydrive_passengers_quantity);
-        mCost = findViewById(R.id.mydrive_cost);
-        mLuggage = findViewById(R.id.mydrive_luggage);
-        mSmokePermitted = findViewById(R.id.mydrive_smoke_permitted);
-        mRoundTrip = findViewById(R.id.mydrive_round_trip);
-        mReturnDate = findViewById(R.id.mydrive_return_date);
-        mDriverComment = findViewById(R.id.mydrive_driver_comment);
+        mStartPlace = findViewById(R.id.bookdrive_start_place);
+        mArrivalPlace = findViewById(R.id.bookdrive_arrival_place);
+        mStopOverPlaces = findViewById(R.id.bookdrive_stop_over_places);
+        mStartDate = findViewById(R.id.bookdrive_start_date);
+        mPassengersQuantity = findViewById(R.id.bookdrive_passengers_quantity);
+        mCost = findViewById(R.id.bookdrive_cost);
+        mLuggage = findViewById(R.id.bookdrive_luggage);
+        mSmokePermitted = findViewById(R.id.bookdrive_smoke_permitted);
+        mRoundTrip = findViewById(R.id.bookdrive_round_trip);
+        mReturnDate = findViewById(R.id.bookdrive_return_date);
+        mDriverComment = findViewById(R.id.bookdrive_driver_comment);
 
 
         final Intent intent = getIntent();
@@ -105,53 +103,14 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
             new GetDriveDetailsTask(this, drive, driveId, getApplicationContext()).execute();
         }
 
-        Button mEditDriveButton = findViewById(R.id.mydrive_edit_button);
-        mEditDriveButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                Intent editDriveIntent = new Intent(getApplicationContext(), EditDriveActivity.class);
-                editDriveIntent.putExtra("Drive", drive);
-                editDriveIntent.putExtra("DriveId", driveId);
-
-                startActivity(editDriveIntent);
-            }
-        });
-
-        Button mEditDriveArrivalDetailsButton = findViewById(R.id.mydrive_editarrivaldetails_button);
-        mEditDriveArrivalDetailsButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent editDriveIntent = new Intent(getApplicationContext(), ArrivalDetails_EditDriveActivity.class);
-                editDriveIntent.putExtra("Drive", drive);
-                editDriveIntent.putExtra("DriveId", driveId);
-
-                startActivity(editDriveIntent);
-            }
-        });
-
-        Button mEditDriveDetailsButton = findViewById(R.id.mydrive_editdrivedetails_button);
-        mEditDriveDetailsButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent editDriveIntent = new Intent(getApplicationContext(), DriveDetails_EditDriveActivity.class);
-                editDriveIntent.putExtra("Drive", drive);
-                editDriveIntent.putExtra("DriveId", driveId);
-
-                startActivity(editDriveIntent);
-            }
-        });
-
-        Button mDeleteDriveButton = findViewById(R.id.mydrive_delete_button);
-        mDeleteDriveButton.setOnClickListener(new View.OnClickListener() {
+        Button mBookDriveButton = findViewById(R.id.bookdrive_submit_button);
+        mBookDriveButton.setOnClickListener(new View.OnClickListener() {
 
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(View v) {
-                new DeleteDriveTask(driveId, getApplicationContext()).execute((Void) null);
-                onNavigateUp();
+                new BookDriveTask(driveId, getApplicationContext()).execute((Void) null);
             }
         });
     }
@@ -159,12 +118,12 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
 
 
 
-    public class DeleteDriveTask extends AsyncTask<Void, Void, Boolean> {
+    public class BookDriveTask extends AsyncTask<Void, Void, Boolean> {
 
         private Context mContext;
         private Long driveId;
 
-        DeleteDriveTask(Long driveId, Context context) {
+        BookDriveTask(Long driveId, Context context) {
             this.driveId = driveId;
             mContext = context;
         }
@@ -172,7 +131,7 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
         @Override
         protected Boolean doInBackground(Void... params) {
 
-            String URL = getString(R.string.server_url) + "/rest/myDrives/delete";
+            String URL = getString(R.string.server_url) + "/rest/bookDrive";
 
             Map<String, Long> driveId_Map = new HashMap<>();
             driveId_Map.put("driveId", driveId);
@@ -185,14 +144,17 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
                         public void onResponse(JSONObject response) {
 
                             try {
-                                Log.i("TAGOnResponse", "Poprawnie usunieto przejazd z bazy danych" );
+                                Log.i("TAGOnResponse", "Poprawnie zarezerwowano przejazd" );
 
                                 int duration = Toast.LENGTH_LONG;
 
-                                Toast toast = Toast.makeText(mContext, "Przejazd został usunięty", duration);
+                                Toast toast = Toast.makeText(getApplicationContext(), "Przejazd został zarezerwowany", duration);
                                 toast.setGravity(Gravity.BOTTOM, 0, 150);
                                 toast.show();
 
+                                Intent intent = new Intent(getApplicationContext(), MyBookingsListActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -207,7 +169,7 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
                             CharSequence text = error.getMessage();
                             int duration = Toast.LENGTH_LONG;
 
-                            Toast toast = Toast.makeText(mContext, "Nie udało się usunąć przejazdu", duration);
+                            Toast toast = Toast.makeText(mContext, "Nie udało się zarezerwować przejazdu", duration);
                             toast.setGravity(Gravity.TOP, 0, 150);
                             toast.show();
                         }
@@ -251,12 +213,12 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
 
     public class GetDriveDetailsTask extends AsyncTask<Void, Void, Boolean> {
 
-        MyDriveActivity activity;
+        BookDriveActivity activity;
         private Context mContext;
         private Long driveId;
         DriveDTO_String drive;
 
-        GetDriveDetailsTask(MyDriveActivity activity, DriveDTO_String drive, Long driveId, Context context) {
+        GetDriveDetailsTask(BookDriveActivity activity, DriveDTO_String drive, Long driveId, Context context) {
             this.activity = activity;
             this.drive = drive;
             this.driveId = driveId;

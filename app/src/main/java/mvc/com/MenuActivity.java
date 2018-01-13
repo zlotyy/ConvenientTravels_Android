@@ -41,6 +41,14 @@ public class MenuActivity extends AppCompatActivity implements LoaderCallbacks<C
         });
 
         Button mSearchDriveButton = (Button) findViewById(R.id.searchDrive);
+        mSearchDriveButton.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), SearchDriveActivity.class);
+                startActivity(intent);
+            }
+        });
 
         Button mMyDrivesButton = (Button) findViewById(R.id.myDrives);
         mMyDrivesButton.setOnClickListener(new OnClickListener() {

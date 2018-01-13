@@ -5,6 +5,8 @@ import java.util.List;
 
 import mvc.com.dto.DriveDTO;
 import mvc.com.dto.DriveDTO_String;
+import mvc.com.dto.SearchDrivesDTO;
+import mvc.com.dto.SearchDrivesDTO_String;
 import mvc.com.enums.LuggageSize;
 import mvc.com.model.DriveModel;
 import mvc.com.model.StopOverPlaceModel;
@@ -84,7 +86,7 @@ public class DriveParser {
         DateFormatHelper dateFormatHelper = new DateFormatHelper(drive.getStartDate(), "yyyy-MM-dd HH:mm");
         String startDate = dateFormatHelper.calendarToString_DateTimeFormat();
 
-        String returnDate = null;
+        String returnDate ="";
         if(drive.getReturnDate() != null) {
             dateFormatHelper = new DateFormatHelper(drive.getReturnDate(), "yyyy-MM-dd HH:mm");
             returnDate = dateFormatHelper.calendarToString_DateTimeFormat();
@@ -118,5 +120,34 @@ public class DriveParser {
     }
 
 
+    public static SearchDrivesDTO_String parseSearchDrivesDTO_TO_SearchDrivesDTOString(SearchDrivesDTO dto){
+        SearchDrivesDTO_String dto_String = new SearchDrivesDTO_String();
 
+        dto_String.setStartPlace(dto.getStartPlace());
+        dto_String.setArrivalPlace(dto.getArrivalPlace());
+        dto_String.setMaxCost(String.valueOf(dto.getMaxCost()));
+        dto_String.setStartDate(dto.getStartDate());
+
+        return dto_String;
+    }
+
+
+    public static SearchDrivesDTO parseSearchDrivesDTOString_TO_SearchDrivesDTO(SearchDrivesDTO_String dto_String){
+        SearchDrivesDTO dto = new SearchDrivesDTO();
+
+        int maxCost;
+        try {
+            String tmp = dto_String.getMaxCost();
+            maxCost = tmp.equals("") ? 999999 : Integer.parseInt(tmp);
+        } catch (Exception e) {
+            maxCost = 999999;
+        }
+
+        dto.setStartPlace(dto_String.getStartPlace());
+        dto.setArrivalPlace(dto_String.getArrivalPlace());
+        dto.setMaxCost(maxCost);
+        dto.setStartDate(dto_String.getStartDate());
+
+        return dto;
+    }
 }

@@ -39,7 +39,7 @@
     <string name="action_go_next">Przejdź dalej</string>
     <string name="prompt_driver_comment">Komentarz na temat przejazdu</string>
     <string name="prompt_passengers_quantity">Ilość pasażerów</string>
-    <string name="prompt_cost">Koszt</string>
+    <string name="prompt_cost">Koszt (zł)</string>
     <string name="checkbox_is_smoke_permitted">Można palić</string>
     <string name="checkbox_is_round_trip">Przejazd w obie strony</string>
     <string name="action_submit">Zatwierdź</string>
