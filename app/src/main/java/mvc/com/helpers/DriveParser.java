@@ -83,8 +83,12 @@ public class DriveParser {
         // parsowanie daty na stringa
         DateFormatHelper dateFormatHelper = new DateFormatHelper(drive.getStartDate(), "yyyy-MM-dd HH:mm");
         String startDate = dateFormatHelper.calendarToString_DateTimeFormat();
-        dateFormatHelper = new DateFormatHelper(drive.getReturnDate(), "yyyy-MM-dd HH:mm");
-        String returnDate = dateFormatHelper.calendarToString_DateTimeFormat();
+
+        String returnDate = null;
+        if(drive.getReturnDate() != null) {
+            dateFormatHelper = new DateFormatHelper(drive.getReturnDate(), "yyyy-MM-dd HH:mm");
+            returnDate = dateFormatHelper.calendarToString_DateTimeFormat();
+        }
 
         String stopOverPlaces = "";
         List<StopOverPlaceModel> stopOverPlacesList = drive.getStopOverPlaces();

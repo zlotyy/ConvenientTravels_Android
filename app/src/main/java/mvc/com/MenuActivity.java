@@ -1,12 +1,16 @@
 package mvc.com;
 
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -61,6 +65,7 @@ public class MenuActivity extends AppCompatActivity implements LoaderCallbacks<C
         Button mExitButton = (Button) findViewById(R.id.exit_button);
         mExitButton.setOnClickListener(new OnClickListener() {
 
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(View v) {
                 attemptLogout();
@@ -94,9 +99,20 @@ public class MenuActivity extends AppCompatActivity implements LoaderCallbacks<C
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void closeApp(){
-        finish();
-        getParent().finish();
+//        finish();
+//        getParent().finish();
+//        System.exit(0);
+
+//        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+//        ComponentName cn = intent.getComponent();
+//        Intent loginIntent = IntentCompat.makeRestartActivityTask(cn);
+//        startActivity(loginIntent);
+//        finish();
+//        getParent().finish();
+        finishAffinity();
+
         System.exit(0);
         Log.i(TAG, "Zamknieto aplikacje");
     }

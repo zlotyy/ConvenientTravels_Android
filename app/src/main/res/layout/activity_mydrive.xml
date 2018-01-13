@@ -31,7 +31,6 @@
             android:layout_width="@dimen/activity_horizontal_margin"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Krakow Majówny Olszanica"
             android:textColor="@android:color/black" />
     </LinearLayout>
 
@@ -54,7 +53,6 @@
             android:layout_width="@dimen/activity_horizontal_margin"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Krakow Majówny Olszanica"
             android:textColor="@android:color/black" />
     </LinearLayout>
 
@@ -77,7 +75,6 @@
             android:layout_width="@dimen/activity_horizontal_margin"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Krakow Majówny Olszanica\nMiechow Majówny Olszanica"
             android:textColor="@android:color/black" />
     </LinearLayout>
 
@@ -100,7 +97,6 @@
             android:layout_width="@dimen/activity_horizontal_margin"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="2018-08-02 22:00"
             android:textColor="@android:color/black" />
     </LinearLayout>
 
@@ -123,7 +119,6 @@
             android:layout_width="@dimen/activity_horizontal_margin"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="3"
             android:textColor="@android:color/black" />
     </LinearLayout>
 
@@ -146,7 +141,6 @@
             android:layout_width="@dimen/activity_horizontal_margin"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="13 zł"
             android:textColor="@android:color/black" />
     </LinearLayout>
 
@@ -169,7 +163,6 @@
             android:layout_width="@dimen/activity_horizontal_margin"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Mały"
             android:textColor="@android:color/black" />
     </LinearLayout>
 
@@ -192,7 +185,6 @@
             android:layout_width="@dimen/activity_horizontal_margin"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Nie"
             android:textColor="@android:color/black" />
     </LinearLayout>
 
@@ -215,7 +207,6 @@
             android:layout_width="@dimen/activity_horizontal_margin"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Tak"
             android:textColor="@android:color/black" />
     </LinearLayout>
 
@@ -238,7 +229,6 @@
             android:layout_width="@dimen/activity_horizontal_margin"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="2018-09-10 10:00"
             android:textColor="@android:color/black" />
     </LinearLayout>
 
@@ -260,7 +250,6 @@
             android:layout_width="@dimen/activity_horizontal_margin"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Wyjazd punktualnie"
             android:textColor="@android:color/black" />
     </LinearLayout>
 

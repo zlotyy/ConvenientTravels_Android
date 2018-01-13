@@ -35,10 +35,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import mvc.com.dto.DriveDTO;
 import mvc.com.dto.DriveDTO_String;
+import mvc.com.helpers.DateFormatHelper;
 
 import static mvc.com.helpers.DriveParser.parseDriveDTOString_TO_DriveDTO;
 
@@ -63,6 +65,7 @@ public class EditDriveActivity extends AppCompatActivity implements LoaderManage
     private DatePicker mDatePickerStartDate;
     private TimePicker mTimePickerStartDate;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,6 +93,18 @@ public class EditDriveActivity extends AppCompatActivity implements LoaderManage
             toast.show();
         } else {
             Log.i("TAG", "Poprawnie wyswietlono szczegoly przejazdu");
+
+            Calendar startDateTime = Calendar.getInstance();
+            String startDateTime_String = drive.getStartDate();
+
+            if(startDateTime_String != null){
+                DateFormatHelper dateFormatHelper = new DateFormatHelper(startDateTime_String, "yyyy-MM-dd HH:mm");
+                startDateTime = dateFormatHelper.stringToCalendar_DateTimeFormat();
+
+                mDatePickerStartDate.updateDate(startDateTime.get(Calendar.YEAR), startDateTime.get(Calendar.MONTH) - 1, startDateTime.get(Calendar.DATE));
+                mTimePickerStartDate.setHour(startDateTime.get(Calendar.HOUR_OF_DAY));
+                mTimePickerStartDate.setMinute(startDateTime.get(Calendar.MINUTE));
+            }
             mCityStartView.setText(drive.getCityStart());
             mStreetStartView.setText(drive.getStreetStart());
             mExactPlaceStartView.setText(drive.getStreetStart());
@@ -101,11 +116,25 @@ public class EditDriveActivity extends AppCompatActivity implements LoaderManage
 
             @Override
             public void onClick(View v) {
+                String startDate;
+                String startTime;
+                String startDateTime;
+
+                // parsowanie datepickera na stringa
+                DateFormatHelper dateHelper = new DateFormatHelper(mDatePickerStartDate, "yyyy-MM-dd");
+                startDate = dateHelper.datepickerToString_DateFormat();
+
+                // parsowanie timepickera na stringa
+                DateFormatHelper timeHelper = new DateFormatHelper(mTimePickerStartDate, "HH:mm");
+                startTime = timeHelper.timepickerToString_DateFormat();
+
+                startDateTime = startDate + " " + startTime;
+
                 drive.setCityStart(mCityStartView.getText().toString());
                 drive.setStreetStart(mStreetStartView.getText().toString());
                 drive.setExactPlaceStart(mExactPlaceStartView.getText().toString());
+                drive.setStartDate(startDate);
 
-                // todo: data i czas
                 // todo: NAPRAWIC BLEDY NA SZCZEGOLACH PRZEJAZDU (NULLE CHYBA)
 
                 DriveDTO driveDTO = parseDriveDTOString_TO_DriveDTO(drive);
@@ -171,7 +200,9 @@ public class EditDriveActivity extends AppCompatActivity implements LoaderManage
                                 toast.setGravity(Gravity.BOTTOM, 0, 150);
                                 toast.show();
 
-                                onNavigateUp();
+                                Intent intent = new Intent(getApplicationContext(), MyDrivesListActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

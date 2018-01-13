@@ -275,6 +275,7 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
                                 mPassengersQuantity.setText(drive.getPassengersQuantity());
                                 mCost.setText(drive.getCost());
                                 mLuggage.setText(drive.getLuggageSize());
+                                mRoundTrip.setText(drive.getIsRoundTrip());
 
                                 DriveDetailsModel driveDetails;
                                 ObjectMapper mapper = new ObjectMapper();
@@ -302,8 +303,8 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
                                 activity.getDrive().setLuggageSize(luggage);
                                 activity.getDrive().setDriverComment(driverComment);
 
-                                mSmokePermitted.setText(passengers);
-                                mRoundTrip.setText(smokePermitted);
+                                mPassengersQuantity.setText(passengers);
+                                mSmokePermitted.setText(smokePermitted);
                                 mLuggage.setText(luggage);
                                 mDriverComment.setText(driverComment);
 

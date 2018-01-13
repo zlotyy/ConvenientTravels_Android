@@ -43,7 +43,6 @@ import java.util.HashMap;
 import mvc.com.dto.DriveDTO;
 import mvc.com.dto.DriveDTO_String;
 import mvc.com.helpers.DateFormatHelper;
-import mvc.com.helpers.DriveParser;
 
 import static mvc.com.helpers.DriveParser.parseDriveDTOString_TO_DriveDTO;
 
@@ -122,7 +121,6 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
 
                     returnDateTime = returnDate + " " + returnTime;
 
-                    drive.setIsRoundTrip(isRoundTrip);
                     drive.setReturnDate(returnDateTime);
                 }
 
@@ -131,6 +129,7 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
                 drive.setCost(mCostView.getText().toString());
                 //drive.setLuggageSize(mLuggageSpinner.getSelectedItem().toString());
                 drive.setIsSmokePermitted(isSmokePermitted);
+                drive.setIsRoundTrip(isRoundTrip);
 
                 DriveDTO driveDTO = parseDriveDTOString_TO_DriveDTO(drive);
 
