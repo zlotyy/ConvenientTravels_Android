@@ -42,6 +42,7 @@ import java.util.HashMap;
 
 import mvc.com.dto.DriveDTO;
 import mvc.com.dto.DriveDTO_String;
+import mvc.com.enums.LuggageSize;
 import mvc.com.helpers.DateFormatHelper;
 
 import static mvc.com.helpers.DriveParser.parseDriveDTOString_TO_DriveDTO;
@@ -75,13 +76,12 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
         mDriverCommentView = findViewById(R.id.driver_comment);
         mPassengersQuantityView = findViewById(R.id.passengers_quantity);
         mCostView = findViewById(R.id.cost);
-        mLuggageSpinner = findViewById(R.id.luggage);
         mSmokePermittedCheckbox = findViewById(R.id.smoke_permitted_checkbox);
         mRoundTripCheckbox = findViewById(R.id.round_trip_checkbox);
         mDatePickerReturnDate = findViewById(R.id.datePicker_returnDate);
         mTimePickerReturnDate = findViewById(R.id.timePicker_returnDate);
 
-        final Spinner mLuggageSpinner = (Spinner) findViewById(R.id.luggage);
+        mLuggageSpinner = (Spinner) findViewById(R.id.luggage);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.luggage_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -124,10 +124,11 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
                     drive.setReturnDate(returnDateTime);
                 }
 
+
                 drive.setDriverComment(mDriverCommentView.getText().toString());
                 drive.setPassengersQuantity(mPassengersQuantityView.getText().toString());
                 drive.setCost(mCostView.getText().toString());
-                //drive.setLuggageSize(mLuggageSpinner.getSelectedItem().toString());
+                drive.setLuggageSize(mLuggageSpinner.getSelectedItem().toString());
                 drive.setIsSmokePermitted(isSmokePermitted);
                 drive.setIsRoundTrip(isRoundTrip);
 
@@ -263,4 +264,15 @@ public class DriveDetails_AddNewDriveActivity extends AppCompatActivity implemen
 
     }
 
+
+
+
+
+    public Spinner getmLuggageSpinner() {
+        return mLuggageSpinner;
+    }
+
+    public void setmLuggageSpinner(Spinner mLuggageSpinner) {
+        this.mLuggageSpinner = mLuggageSpinner;
+    }
 }

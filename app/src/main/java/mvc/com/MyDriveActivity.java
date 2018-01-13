@@ -32,15 +32,11 @@ import org.codehaus.jackson.type.TypeReference;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import mvc.com.dto.DriveDTO_String;
 import mvc.com.enums.LuggageSize;
-import mvc.com.helpers.DateFormatHelper;
 import mvc.com.model.DriveDetailsModel;
-import mvc.com.model.DriveModel;
-import mvc.com.model.StopOverPlaceModel;
 
 
 /**
@@ -139,7 +135,7 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
 
             @Override
             public void onClick(View v) {
-                Intent editDriveIntent = new Intent(getApplicationContext(), EditDriveActivity.class);
+                Intent editDriveIntent = new Intent(getApplicationContext(), DriveDetails_EditDriveActivity.class);
                 editDriveIntent.putExtra("Drive", drive);
                 editDriveIntent.putExtra("DriveId", driveId);
 
@@ -271,7 +267,7 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
 
             String URL = getString(R.string.server_url) + "/rest/getDriveDetails";
 
-            Map<String, Long> driveId_Map = new HashMap<>();
+            final Map<String, Long> driveId_Map = new HashMap<>();
             driveId_Map.put("driveId", driveId);
             JSONObject driveIdJSON = new JSONObject(driveId_Map);
 
@@ -302,6 +298,7 @@ public class MyDriveActivity extends AppCompatActivity implements LoaderManager.
                                 mCost.setText(drive.getCost());
                                 mLuggage.setText(drive.getLuggageSize());
                                 mRoundTrip.setText(drive.getIsRoundTrip());
+                                mReturnDate.setText(drive.getReturnDate());
 
                                 DriveDetailsModel driveDetails;
                                 ObjectMapper mapper = new ObjectMapper();
